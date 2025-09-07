@@ -1,0 +1,77 @@
+// controllers/reportController.js
+import Report from "../models/Report.js";
+import { successResponse, errorResponse } from "../utils/response.js";
+
+// Citizen: Create a new report
+export const createReport = async (req, res) => {
+  try {
+    const { title, description, location, category } = req.body;
+
+    const report = await Report.create({
+      title,
+      description,
+      location,
+      category,
+      photoUrl: req.file ? `/uploads/${req.file.filename}` : null, // if using multer
+      createdBy: req.user._id,
+    });
+
+    return successResponse(res, report, "Report submitted successfully", 201);
+  } catch (error) {
+    return errorResponse(res, error.message);
+  }
+};
+
+// Citizen/Admin: Get all reports (filter by category/status)
+export const getReports = async (req, res) => {
+  try {
+    const { category, status } = req.query;
+
+    const filter = {};
+    if (category) filter.category = category;
+    if (status) filter.status = status;
+
+    const reports = await Report.find(filter)
+      .populate("createdBy", "name email role")
+      .populate("assignedTo", "name email role")
+      .sort({ createdAt: -1 });
+
+    return successResponse(res, reports, "Reports fetched successfully");
+  } catch (error) {
+    return errorResponse(res, error.message);
+  }
+};
+
+// Admin: Update report status
+export const updateReportStatus = async (req, res) => {
+  try {
+    const { reportId } = req.params;
+    const { status, assignedTo } = req.body;
+
+    const report = await Report.findByIdAndUpdate(
+      reportId,
+      { status, assignedTo },
+      { new: true }
+    );
+
+    if (!report) {
+      return errorResponse(res, "Report not found", 404);
+    }
+
+    return successResponse(res, report, "Report updated successfully");
+  } catch (error) {
+    return errorResponse(res, error.message);
+  }
+};
+
+// Citizen: Get my reports
+export const getMyReports = async (req, res) => {
+  try {
+    const reports = await Report.find({ createdBy: req.user._id }).sort({
+      createdAt: -1,
+    });
+    return successResponse(res, reports, "My reports fetched successfully");
+  } catch (error) {
+    return errorResponse(res, error.message);
+  }
+};
