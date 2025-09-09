@@ -64,6 +64,30 @@ export const updateReportStatus = async (req, res) => {
   }
 };
 
+// Citizen: Update their own report
+export const updateMyReport = async (req, res) => {
+  try {
+    const { reportId } = req.params;
+    const { title, description } = req.body; // Only allow title/description edits
+
+    // Find the report only if the ID and the creator match
+    const report = await Report.findOne({ _id: reportId, createdBy: req.user._id });
+
+    if (!report) {
+      return errorResponse(res, "Report not found or you don't have permission to edit it", 404);
+    }
+
+    // Update fields and save
+    report.title = title || report.title;
+    report.description = description || report.description;
+    await report.save();
+
+    return successResponse(res, report, "Report updated successfully");
+  } catch (error) {
+    return errorResponse(res, error.message);
+  }
+};
+
 // Citizen: Get my reports
 export const getMyReports = async (req, res) => {
   try {

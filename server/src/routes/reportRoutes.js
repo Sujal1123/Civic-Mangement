@@ -8,6 +8,7 @@ import {
   getReports,
   updateReportStatus,
   getMyReports,
+  updateMyReport,
 } from "../controllers/reportController.js";
 
 const router = express.Router();
@@ -24,6 +25,12 @@ router.put(
   authMiddleware,
   roleMiddleware(["admin"]),
   updateReportStatus
+);
+ // New route for user edits
+router.put(
+  "/my/:reportId",
+  authMiddleware,
+  updateMyReport
 );
 
 // Admin & Citizen: view all reports (filters supported)

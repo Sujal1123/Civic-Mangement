@@ -1,13 +1,23 @@
-import { getMyReports, getReports, Report } from "@/utils/reportService"; // Import the updated Report type
+import {
+  editMyReport,
+  getMyReports,
+  getReports,
+  Report,
+} from "@/utils/reportService"; // Import the updated Report type
 import { loadUser, UserData } from "@/utils/userStorage";
 import { useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
 import {
+  Alert,
+  Button,
   Dimensions,
   Image,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -31,6 +41,12 @@ export default function ProfileScreen() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<UserData | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
+
+  // State for handling the edit modal and form
+  const [isEditModalVisible, setEditModalVisible] = useState(false);
+  const [currentPost, setCurrentPost] = useState<Post | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editDescription, setEditDescription] = useState("");
 
   // Load user data (this part is fine)
   useFocusEffect(
@@ -85,6 +101,46 @@ export default function ProfileScreen() {
     }, [])
   );
 
+  // Function to open the edit modal
+  const handleEditPress = (post: Post) => {
+    setCurrentPost(post);
+    setEditTitle(post.title);
+    setEditDescription(post.description);
+    setEditModalVisible(true);
+  };
+  // ✅ Function to save the edited post (now fully functional)
+  const handleSaveChanges = async () => {
+    if (!currentPost) return;
+
+    // Call the service to update the report on the server
+    const updatedReport = await editMyReport(
+      currentPost.id,
+      editTitle,
+      editDescription
+    );
+
+    if (updatedReport) {
+      // Refresh the posts list to show the changes
+      setPosts(
+        posts.map((p) =>
+          p.id === updatedReport._id
+            ? {
+                ...p,
+                title: updatedReport.title,
+                description: updatedReport.description,
+              }
+            : p
+        )
+      );
+      Alert.alert("Success", "Report updated successfully!");
+    } else {
+      Alert.alert("Error", "Failed to update report.");
+    }
+
+    setEditModalVisible(false);
+    setCurrentPost(null);
+  };
+
   if (loading) return <Text style={styles.loadingText}>Loading...</Text>;
 
   // ✅ FIX 3: Your rendering logic for `post.media` will now work correctly.
@@ -111,10 +167,47 @@ export default function ProfileScreen() {
               <Text style={styles.date}>
                 Posted on: {new Date(post.createdAt).toLocaleString()}
               </Text>
+              <TouchableOpacity
+                style={styles.editButton}
+                onPress={() => handleEditPress(post)}
+              >
+                <Text style={styles.editButtonText}>Edit</Text>
+              </TouchableOpacity>
             </View>
           ))
         )}
       </ScrollView>
+      <Modal
+        visible={isEditModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setEditModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Edit Report</Text>
+            <TextInput
+              style={styles.input}
+              value={editTitle}
+              onChangeText={setEditTitle}
+              placeholder="Report Title"
+            />
+            <TextInput
+              style={[styles.input, { height: 100 }]}
+              value={editDescription}
+              onChangeText={setEditDescription}
+              placeholder="Report Description"
+              multiline
+            />
+            <Button title="Save Changes" onPress={handleSaveChanges} />
+            <Button
+              title="Cancel"
+              onPress={() => setEditModalVisible(false)}
+              color="gray"
+            />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -169,5 +262,35 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#777",
     textAlign: "right",
+  },
+  editButton: {
+    marginTop: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: "#007BFF",
+    borderRadius: 5,
+    alignSelf: "flex-end",
+  },
+  editButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 15,
   },
 });

@@ -142,3 +142,15 @@ export async function updateReportStatus(reportId: string, status: string, assig
         return null;
     }
 }
+// USER: Edit their own report (title and description)
+export async function editMyReport(reportId: string, title: string, description: string): Promise<Report | null> {
+    try {
+        const client = await axiosAuth();
+        // Uses the new '/my/:reportId' endpoint
+        const res = await client.put(`/reports/my/${reportId}`, { title, description });
+        return res.data.data;
+    } catch (error: any) {
+        console.error("Error editing report:", error.response?.data || error.message);
+        return null;
+    }
+}
