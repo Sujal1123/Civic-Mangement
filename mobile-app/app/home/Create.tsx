@@ -94,45 +94,42 @@ export default function CreateScreen() {
   };
 
   const savePost = async () => {
+    // --- Validation ---
     if (!user) {
       Alert.alert("Not logged in", "Please log in to submit a report.");
       return;
     }
-
     if (!title || !description) {
       Alert.alert("Incomplete data", "Please fill all fields.");
       return;
     }
-
     setLoading(true);
 
     try {
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("description", description);
-      formData.append("category", "general"); // you can add category input
-      formData.append("location", "Unknown"); // add location input if needed
+      // ✅ Pass raw data that matches the schema definitions
+      const response = await createReport(
+        title,
+        description,
+        // Replace with actual coordinates from a location picker
+        { lat: 21.0077, lng: 75.5626 }, // Example: Jalgaon coordinates
+        // ✅ Use a valid category from your schema's enum list
+        "pothole",
+        mediaList[0] // Pass the first media item
+      );
 
-      mediaList.forEach((media) => {
-        formData.append("media", {
-          uri: media.uri,
-          type: media.type === "video" ? "video/mp4" : "image/jpeg",
-          name: media.name,
-        } as any);
-      });
-
-      const response = await createReport(formData, user.token);
-      console.log("Report submitted:", response);
-      Alert.alert("Success", "Report submitted successfully!");
-      setTitle("");
-      setDescription("");
-      setMediaList([]);
+      if (response) {
+        console.log("Report submitted:", response);
+        Alert.alert("Success", "Report submitted successfully!");
+        // Reset the form state
+        setTitle("");
+        setDescription("");
+        setMediaList([]);
+      } else {
+        Alert.alert("Error", "Failed to submit report. Please try again.");
+      }
     } catch (error: any) {
       console.error("Error submitting report:", error);
-      Alert.alert(
-        "Error",
-        error?.response?.data?.message || "Failed to submit report"
-      );
+      Alert.alert("Error", "An unexpected error occurred.");
     } finally {
       setLoading(false);
     }

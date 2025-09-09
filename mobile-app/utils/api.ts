@@ -1,7 +1,7 @@
 // api.ts
 import { UserData } from "./userStorage";
 
-const BASE_URL = "http://192.168.1.8:5000/api/auth"; // Replace with your machine's IP
+const BASE_URL = "http://localhost:5000/api/auth"; // Replace with your machine's IP
 
 /**
  * Register a new user

@@ -2,7 +2,7 @@
 import axios from "axios";
 import { loadUser } from "./userStorage";
 
-const API_BASE = "http://192.168.1.8:5000/api"; // change if using emulator/device
+const API_BASE = "http://localhost:5000/api"; // change if using emulator/device
 
 export type MediaItem = {
     uri: string;
@@ -14,9 +14,14 @@ export type Report = {
     _id: string;
     title: string;
     description: string;
-    location?: string;
+    // ✅ FIX: Location is an object
+    location?: {
+        lat: number;
+        lng: number;
+        address?: string;
+    };
     category?: string;
-    photoUrl?: string;
+    photoUrl?: string; // photoUrl is a single string from the backend
     status?: string;
     assignedTo?: any;
     createdBy: any;
@@ -70,13 +75,13 @@ export async function createReport(
             formData.append("category", category);
         }
 
-        // ✅ FIX: Send location as separate fields instead of a JSON string.
-        // The backend will automatically reassemble this into a location object.
+        // Send location as separate fields for the backend to reassemble.
         if (location) {
             formData.append("location[lat]", location.lat.toString());
             formData.append("location[lng]", location.lng.toString());
         }
 
+        // Append the media file if it exists.
         if (media) {
             formData.append("media", {
                 uri: media.uri,
@@ -85,7 +90,12 @@ export async function createReport(
             } as any);
         }
 
-        const res = await client.post("/reports", formData)
+        // ✅ FIX: Add the required "Content-Type" header for FormData.
+        const res = await client.post("/reports", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
 
         console.log("Report submitted successfully:", res.data.data);
         return res.data.data;
