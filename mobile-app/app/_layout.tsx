@@ -1,73 +1,45 @@
-import { loadUser, UserData } from "@/utils/userStorage";
-import { router, Stack } from "expo-router";
-import { useEffect, useState } from "react";
-// User type
-/*
-type User = { name: string; email: string } | null;
+import { AuthProvider } from "@/hooks/useAuth";
+import { Stack } from "expo-router";
+import { useAuth } from "@/hooks/useAuth"; // We need this for the initial check
+import {
+  ActivityIndicator,
+  Platform,
+  SafeAreaView,
+  StatusBar,
+} from "react-native";
 
-// Context
-const UserContext = createContext<{
-  user: User;
-  setUser: (u: User) => void;
-}>({ user: null, setUser: () => {} });
+// A component to handle the initial loading and routing logic
+function Root() {
+  const { loading } = useAuth();
 
-export function useUser() {
-  return useContext(UserContext);
-}
-*/
-
-export default function RootLayout() {
-  const [user, setUser] = useState<UserData | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      const saved = await loadUser();
-      console.log("Welcome Saved user:", saved);
-      if (saved) {
-        setUser(saved);
-      }
-    })();
-  }, []);
-
-  if (user) {
-    router.replace({
-      pathname: "/home/Feed",
-      params: {
-        user: JSON.stringify(user), // Pass as string because routes only support serializable params
-      },
-    });
+  if (loading) {
+    // Show a loading indicator while the auth state is being determined
+    return <ActivityIndicator style={{ flex: 1 }} />;
   }
 
-  /*
-  if (user) {
-    router.replace("/home/Feed");
-  }*/
+  // The Slot will automatically render the correct group (public, auth, or tabs)
+  // This is no longer needed here as the group layouts handle redirection.
+  // We use Stack.Screen to define the available routes.
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      {user ? (
-        <Stack.Screen name="home" />
-      ) : (
-        <>
-          <Stack.Screen name="register" />
-          <Stack.Screen name="login" />
-        </>
-      )}
-    </Stack>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+      }}
+    >
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(public)" />
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(tabs)" />
+      </Stack>
+    </SafeAreaView>
   );
 }
-/*
+
+export default function RootLayout() {
   return (
-    <UserContext.Provider value={{ user, setUser }}>
-      <Stack screenOptions={{ headerShown: false }}>
-        {user ? (
-          <Stack.Screen name="home" />
-        ) : (
-          <>
-            <Stack.Screen name="register" />
-            <Stack.Screen name="login" />
-          </>
-        )}
-      </Stack>
-    </UserContext.Provider>
+    <AuthProvider>
+      <Root />
+    </AuthProvider>
   );
-}*/
+}
