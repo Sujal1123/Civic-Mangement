@@ -7,11 +7,13 @@ import {
   SafeAreaView,
   StatusBar,
 } from "react-native";
+import { ThemeProvider } from "@/context/ThemeContext";
+import { useNavigationBar } from "@/hooks/usenavigationBar";
 
 // A component to handle the initial loading and routing logic
 function Root() {
   const { loading } = useAuth();
-
+  useNavigationBar();
   if (loading) {
     // Show a loading indicator while the auth state is being determined
     return <ActivityIndicator style={{ flex: 1 }} />;
@@ -24,7 +26,6 @@ function Root() {
     <SafeAreaView
       style={{
         flex: 1,
-        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
       }}
     >
       <Stack screenOptions={{ headerShown: false }}>
@@ -38,8 +39,10 @@ function Root() {
 
 export default function RootLayout() {
   return (
-    <AuthProvider>
-      <Root />
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <Root />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

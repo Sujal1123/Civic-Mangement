@@ -1,7 +1,9 @@
 import React from "react";
 import { View, StyleSheet, StatusBar } from "react-native";
 import ImageCarousel from "@/components/welcome/ImageCarousel";
+import { useTheme } from "@/context/ThemeContext";
 import WelcomeContent from "@/components/welcome/WelcomeContent";
+import ThemeCycleButton from "@/components/theming/ThemeCycleButton";
 
 const imageData = [
   "https://free-images.com/or/eddb/community_old_man_amateur.jpg",
@@ -18,18 +20,27 @@ const imageData = [
 ];
 
 export default function WelcomeScreen() {
+  // 1. Get the effective theme ('light' or 'dark')
+  const { effectiveTheme } = useTheme();
+  // 2. Pass the theme to the styles function
+  const styles = getStyles(effectiveTheme);
   return (
     <View style={styles.container}>
       <StatusBar />
+      <ThemeCycleButton></ThemeCycleButton>
       <ImageCarousel data={imageData} />
       <WelcomeContent />
     </View>
   );
 }
+export const getStyles = (theme: "light" | "dark") => {
+  const isDark = theme === "dark";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-});
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      // Sets the background color based on the current theme
+      backgroundColor: isDark ? "#121212" : "#FFFFFF",
+    },
+  });
+};

@@ -1,0 +1,38 @@
+app/
+├── (tabs)/                  <-- Main navigation layout
+│   ├── _layout.tsx            <-- Defines the bottom tabs
+│   ├── home/                  <-- Home tab feature
+│   │   ├── _layout.tsx        <-- Layout for the home stack
+│   │   ├── index.tsx          <-- FeedScreen
+│   │   └── create.tsx         <-- CreateScreen
+│   ├── profile/               <-- Profile tab feature
+│   │   ├── _layout.tsx        <-- Layout for the profile stack
+│   │   ├── index.tsx          <-- ProfileScreen (showing user's posts)
+│   │   └── settings.tsx       <-- SettingsScreen
+│   └── index.tsx              <-- Redirects to the home tab
+├── (auth)/                  <-- Authentication feature
+│   ├── _layout.tsx            <-- Layout for the auth stack
+│   ├── login.tsx              <-- LoginScreen
+│   └── register.tsx           <-- RegisterScreen
+└── _layout.tsx                <-- Root layout (manages auth state)
+components/                  <-- Shared, reusable UI components
+├── common/                  <-- General components (Button, Input, etc.)
+│   ├── AppButton.tsx
+│   └── FormInput.tsx
+├── reports/                 <-- Components specific to reports
+│   ├── EditPostModal.tsx
+│   ├── PostCard.tsx
+│   └── PostList.tsx
+└── layout/                  <-- Layout components (Container, etc.)
+    └── ScreenContainer.tsx
+hooks/                       <-- Custom React hooks
+├── useAuth.ts               <-- Manages user authentication state
+└── useReports.ts            <-- Fetches and manages report data
+lib/                         <-- Core logic, types, and external services
+├── api/                     <-- API layer (axios instances, services)
+│   ├── apiClient.ts
+│   ├── reportService.ts
+│   └── userService.ts
+├── storage/                 <-- AsyncStorage helpers
+│   └── userStorage.ts
+└── types.ts                 <-- Shared TypeScript types

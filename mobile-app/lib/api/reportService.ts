@@ -54,6 +54,17 @@ export async function getReports(category?: string, status?: string): Promise<Re
         return [];
     }
 }
+/*not workig?? */
+export async function getReportById(reportId: string): Promise<Report[]> {
+    try {
+        const res = await apiClient.get(`/reports/${reportId}`);
+        return res.data.data;
+    } catch (error: any) {
+        console.error(`Error fetching report with ID ${reportId}:`, error.response?.data || error.message);
+        throw new Error("Failed to fetch the specified report.");
+        return [];
+    }
+}
 
 // ... getMyReports, updateReportStatus, editMyReport functions updated similarly
 

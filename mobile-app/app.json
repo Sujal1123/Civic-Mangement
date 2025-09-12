@@ -13,11 +13,16 @@
     },
     "android": {
        "usesCleartextTraffic": true,
+       
+      "abiFilters": ["arm64-v8a"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
+      "edgeToEdgeEnabled": false,
+      "androidStatusBar": {
+      "translucent": false
+    },
       "package": "com.anonymous.CivicApp"
     },
     "web": {

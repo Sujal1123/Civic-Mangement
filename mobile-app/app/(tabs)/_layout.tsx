@@ -60,6 +60,12 @@ export default function TabsLayout() {
             ),
           }}
         />
+        <Tabs.Screen
+          name="posts/[id]" // Assumes you have a file named `app/(tabs)/extra-screen.tsx`
+          options={{
+            href: null,
+          }}
+        />
         {/* Add other tabs here */}
       </Tabs>
 

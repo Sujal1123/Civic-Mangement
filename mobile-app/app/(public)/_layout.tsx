@@ -6,7 +6,6 @@ export default function PublicLayout() {
     <SafeAreaView
       style={{
         flex: 1,
-        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
       }}
     >
       <Stack screenOptions={{ headerShown: false }} />

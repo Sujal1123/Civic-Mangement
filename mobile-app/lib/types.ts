@@ -1,3 +1,5 @@
+import { ViewStyle } from "react-native";
+
 // The user data structure from your API
 export type UserData = {
     _id: string;
@@ -38,4 +40,10 @@ export type Post = {
     description: string;
     media: MediaItem[]; // Mapped from the API's single photoUrl
     createdAt: string;
+};
+
+export type ThemeCycleButtonProps = {
+    style?: ViewStyle;
+    size?: number;
+    color?: string;
 };
