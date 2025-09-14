@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Image, ScrollView, StyleSheet } from "react-native";
 import { Post } from "@/lib/types";
 import { useTheme } from "@/context/ThemeContext";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PostDetails({ post }: { post: Post }) {
   // 1. Get the effective theme ('light' or 'dark')
@@ -10,18 +11,28 @@ export default function PostDetails({ post }: { post: Post }) {
   const styles = getStyles(effectiveTheme);
 
   return (
-    <ScrollView style={styles.container}>
-      {post.media.length > 0 && (
-        <Image source={{ uri: post.media[0].uri }} style={styles.mediaImage} />
-      )}
-      <View style={styles.contentContainer}>
-        <Text style={styles.title}>{post.title}</Text>
-        <Text style={styles.date}>
-          {new Date(post.createdAt).toLocaleDateString()}
-        </Text>
-        <Text style={styles.description}>{post.description}</Text>
-      </View>
-    </ScrollView>
+    <View style={styles.container}>
+      <SafeAreaView
+        edges={["top", "left", "right", "bottom"]}
+        style={{ flex: 1 }}
+      >
+        <ScrollView style={styles.container}>
+          {post.media.length > 0 && (
+            <Image
+              source={{ uri: post.media[0].uri }}
+              style={styles.mediaImage}
+            />
+          )}
+          <View style={styles.contentContainer}>
+            <Text style={styles.title}>{post.title}</Text>
+            <Text style={styles.date}>
+              {new Date(post.createdAt).toLocaleDateString()}
+            </Text>
+            <Text style={styles.description}>{post.description}</Text>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </View>
   );
 }
 

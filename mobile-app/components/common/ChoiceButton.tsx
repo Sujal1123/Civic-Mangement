@@ -10,7 +10,7 @@ type ChoiceButtonProps = {
 export default function ChoiceButton({
   title,
   onPress,
-  color = "#007BFF",
+  color,
 }: ChoiceButtonProps) {
   return (
     <TouchableOpacity

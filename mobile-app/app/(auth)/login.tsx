@@ -16,7 +16,6 @@ export default function LoginScreen() {
 
   return (
     <LoginForm
-      type={type}
       email={email}
       setEmail={setEmail}
       password={password}

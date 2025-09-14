@@ -24,3 +24,5 @@ export const Colors = {
     tabIconSelected: tintColorDark,
   },
 };
+// Also export the palette type, so our context knows what its shape is
+export type ColorPalette = typeof Colors.light;

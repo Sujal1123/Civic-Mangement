@@ -1,3 +1,4 @@
+import { AppColorPalette, Palette } from "@/constants/Palette";
 import React, {
   createContext,
   useState,
@@ -16,6 +17,7 @@ type ThemeContextType = {
   // This is the actual theme being applied ('light' or 'dark')
   effectiveTheme: "light" | "dark";
   setThemeOption: (option: ThemeOption) => void;
+  colors: AppColorPalette;
 };
 
 export const ThemeContext = createContext<ThemeContextType | undefined>(
@@ -44,10 +46,10 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     });
     return () => subscription.remove();
   }, [themeOption]);
-
+  const colors = Palette(effectiveTheme);
   return (
     <ThemeContext.Provider
-      value={{ themeOption, effectiveTheme, setThemeOption }}
+      value={{ themeOption, effectiveTheme, setThemeOption, colors }}
     >
       {children}
     </ThemeContext.Provider>

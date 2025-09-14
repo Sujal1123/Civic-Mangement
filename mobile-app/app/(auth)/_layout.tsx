@@ -14,15 +14,9 @@ export default function AuthLayout() {
   }
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-      }}
-    >
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="login" />
-        <Stack.Screen name="register" />
-      </Stack>
-    </SafeAreaView>
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="login" />
+      <Stack.Screen name="register" />
+    </Stack>
   );
 }

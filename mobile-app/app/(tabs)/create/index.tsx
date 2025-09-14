@@ -3,6 +3,10 @@ import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
 import { useCreateReportForm } from "@/hooks/useCreateReportForm";
 import ReportForm from "@/components/reports/ReportForm";
 import MediaPicker from "@/components/reports/MediaPicker";
+import { SafeAreaView } from "react-native-safe-area-context";
+import ThemeCycleButton from "@/components/theming/ThemeCycleButton";
+import { useTheme } from "@/hooks/useTheme";
+import { useStylePalette } from "@/constants/StylePalette";
 
 export default function CreateScreen() {
   const {
@@ -16,37 +20,58 @@ export default function CreateScreen() {
     savePost,
   } = useCreateReportForm();
 
+  // 1. Get the effective theme ('light' or 'dark')
+  const { effectiveTheme, colors } = useTheme();
+  // 2. Pass the theme to the styles function
+  const cstyles = getStyles(effectiveTheme);
+  const styles = useStylePalette();
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.heading}>Create New Report</Text>
+    <View style={[styles.tabcontainer]}>
+      <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
+        <ThemeCycleButton></ThemeCycleButton>
+        <ScrollView
+          contentContainerStyle={[
+            cstyles.container,
+            { alignItems: "center", padding: 0 },
+          ]}
+        >
+          <Text style={[styles.title, { textAlign: "center" }]}>
+            Create New Report
+          </Text>
 
-      <ReportForm
-        title={title}
-        setTitle={setTitle}
-        description={description}
-        setDescription={setDescription}
-      />
+          <ReportForm
+            title={title}
+            setTitle={setTitle}
+            description={description}
+            setDescription={setDescription}
+          />
 
-      <MediaPicker mediaList={mediaList} onPickMedia={pickMedia} />
+          <MediaPicker mediaList={mediaList} onPickMedia={pickMedia} />
 
-      <Button
-        title={loading ? "Submitting..." : "Submit Report"}
-        onPress={savePost}
-        disabled={loading}
-      />
-    </ScrollView>
+          <Button
+            title={loading ? "Submitting..." : "Submit Report"}
+            onPress={savePost}
+            disabled={loading}
+          />
+        </ScrollView>
+      </SafeAreaView>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    flexGrow: 1,
-  },
-  heading: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-});
+export const getStyles = (theme: "light" | "dark") => {
+  const isDark = theme === "dark";
+
+  const { colors } = useTheme();
+  return StyleSheet.create({
+    container: {
+      flexGrow: 1,
+    },
+    heading: {
+      fontSize: 24,
+      fontWeight: "bold",
+      marginBottom: 20,
+      textAlign: "center",
+    },
+  });
+};

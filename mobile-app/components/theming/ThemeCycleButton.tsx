@@ -3,6 +3,8 @@ import { Pressable, StyleSheet, ViewStyle } from "react-native";
 // ✅ Make sure to import from your StyleSheet-based context hook
 import { useTheme } from "@/context/ThemeContext";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Palette } from "@/constants/Palette";
 
 // Define the type for valid icon names
 type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
@@ -39,6 +41,10 @@ export default function ThemeCycleButton({
   // ✅ Get the correct icon name for the current theme option
   const iconName = themeIcons[themeOption];
 
+  // 1. Get the effective theme ('light' or 'dark')
+  const { effectiveTheme } = useTheme();
+  // 2. Pass the theme to the styles function
+  const styles = getStyles(effectiveTheme);
   return (
     <Pressable
       onPress={handlePress}
@@ -53,7 +59,41 @@ export default function ThemeCycleButton({
     </Pressable>
   );
 }
+export const getStyles = (theme: "light" | "dark") => {
+  const isDark = theme === "dark";
+  const insets = useSafeAreaInsets();
 
+  const { colors } = useTheme();
+  /*
+  const colors = {
+    themeButton: isDark
+      ? Palette.darkthemebuttoncolor
+      : Palette.lighttheembuttoncolor,
+    themeBorder: isDark
+      ? Palette.darkthemebuttonborder
+      : Palette.lighttheembuttonborder,
+  };*/
+  return StyleSheet.create({
+    button: {
+      backgroundColor: colors.themeButton,
+      position: "absolute",
+      right: 0,
+      top: insets.top,
+      borderBottomRightRadius: 0,
+      borderTopRightRadius: 0,
+      zIndex: 10,
+      padding: 8,
+      borderRadius: 30,
+      justifyContent: "center",
+      alignItems: "center",
+      borderTopColor: colors.themeBorder,
+      borderBottomColor: colors.themeBorder,
+      borderLeftColor: colors.themeBorder,
+      borderWidth: 1,
+    },
+  });
+};
+/*
 const styles = StyleSheet.create({
   button: {
     padding: 8,
@@ -61,4 +101,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-});
+});*/

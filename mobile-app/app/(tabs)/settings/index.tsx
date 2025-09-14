@@ -2,28 +2,44 @@ import { StyleSheet, Text, View } from "react-native";
 import ThemeSetting from "@/components/settings/ThemeSetting";
 import LogoutButton from "@/components/settings/LogoutButton";
 import DeleteAccountButton from "@/components/settings/DeleteAccount";
+import ThemeCycleButton from "@/components/theming/ThemeCycleButton";
+import { useTheme } from "@/hooks/useTheme";
+import { useStylePalette } from "@/constants/StylePalette";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingsScreen() {
+  // 1. Get the effective theme ('light' or 'dark')
+  const { effectiveTheme, colors } = useTheme();
+  // 2. Pass the theme to the styles function
+  const cstyles = getStyles(effectiveTheme);
+  const styles = useStylePalette();
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Settings</Text>
+    <View style={[styles.tabcontainer, { flex: 1 }]}>
+      <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
+        <ThemeCycleButton></ThemeCycleButton>
+        <Text style={styles.title}>Settings</Text>
 
-      <ThemeSetting />
-      <LogoutButton />
-      <DeleteAccountButton />
+        <ThemeSetting />
+        <LogoutButton />
+        <DeleteAccountButton />
+      </SafeAreaView>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#fff",
-  },
-  header: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-});
+export const getStyles = (theme: "light" | "dark") => {
+  const isDark = theme === "dark";
+
+  const { colors } = useTheme();
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.tabBackground,
+    },
+    header: {
+      fontSize: 28,
+      fontWeight: "bold",
+      marginBottom: 20,
+    },
+  });
+};

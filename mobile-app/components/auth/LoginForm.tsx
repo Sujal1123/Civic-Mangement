@@ -1,3 +1,4 @@
+import { useTheme } from "@/hooks/useTheme";
 import React from "react";
 import {
   View,
@@ -5,10 +6,15 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Dimensions,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import ThemeCycleButton from "../theming/ThemeCycleButton";
+import { Palette } from "@/constants/Palette";
+import { useStylePalette } from "@/constants/StylePalette";
 
 type LoginFormProps = {
-  type: "admin" | "citizen";
+  //type: /*"admin" |*/ "citizen";
   email: string;
   setEmail: (email: string) => void;
   password: string;
@@ -17,8 +23,8 @@ type LoginFormProps = {
   onNavigateToRegister: () => void;
 };
 
+const { width, height } = Dimensions.get("screen");
 export default function LoginForm({
-  type,
   email,
   setEmail,
   password,
@@ -26,96 +32,75 @@ export default function LoginForm({
   onLogin,
   onNavigateToRegister,
 }: LoginFormProps) {
+  // 1. Get the effective theme ('light' or 'dark')
+  const { effectiveTheme, colors } = useTheme();
+  // 2. Pass the theme to the styles function
+  //const cstyles = getStyles(effectiveTheme);
+  const styles = useStylePalette();
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        Login as {type === "admin" ? "Admin" : "Citizen"}
-      </Text>
-      <TextInput
-        placeholder="Enter email"
-        style={styles.input}
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TextInput
-        placeholder="Password"
-        style={styles.input}
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-      <TouchableOpacity style={styles.loginButton} onPress={onLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
-
-      {type === "citizen" && (
-        <>
-          <TouchableOpacity
-            style={styles.createButton}
-            onPress={onNavigateToRegister}
-          >
-            <Text style={styles.buttonText}>No account? Register</Text>
-          </TouchableOpacity>
-          <Text style={styles.userNote}>
-            Users can login with their registered email address.
+      <SafeAreaView edges={["top", "bottom"]} style={{ flex: 1 }}>
+        <ThemeCycleButton></ThemeCycleButton>
+        <View style={styles.container2}>
+          <Text style={styles.title}>
+            Login as {/*type === "admin" ? "Admin" : */ "Citizen"}
           </Text>
-        </>
-      )}
+          <TextInput
+            placeholder="Enter email"
+            placeholderTextColor={colors.PlaceholderText}
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          <TextInput
+            placeholder="Password"
+            placeholderTextColor={colors.PlaceholderText}
+            style={styles.input}
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
 
-      {type === "admin" && (
+          <Text style={styles.subtitle2}></Text>
+          <TouchableOpacity style={styles.loginButton} onPress={onLogin}>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+
+          <Text style={styles.subtitle2}></Text>
+          <Text style={styles.userNote}>
+            New here, Click on below button to create your account.
+          </Text>
+          <>
+            <TouchableOpacity
+              style={styles.createButton}
+              onPress={onNavigateToRegister}
+            >
+              <Text style={styles.buttonText}>No account? Register</Text>
+            </TouchableOpacity>
+          </>
+          {/*type === "citizen" && (
+            <>
+              <TouchableOpacity
+                style={styles.createButton}
+                onPress={onNavigateToRegister}
+              >
+                <Text style={styles.buttonText}>No account? Register</Text>
+              </TouchableOpacity>
+              <Text style={styles.userNote}>
+                Users can login with their registered email address.
+              </Text>
+            </>
+          )*/}
+
+          {/*type === "admin" && (
         <Text style={styles.adminNote}>
           Admins must enter credentials provided by the organization.
         </Text>
-      )}
+      )*/}
+        </View>
+      </SafeAreaView>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  // ... All the styles from your original file go here
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 20,
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    width: "90%",
-    marginBottom: 15,
-    borderRadius: 8,
-  },
-  adminNote: { color: "red", margin: 10, textAlign: "center" },
-  userNote: { color: "green", margin: 10, textAlign: "center" },
-  loginButton: {
-    backgroundColor: "#4CAF50",
-    padding: 15,
-    borderRadius: 8,
-    width: 300,
-    alignItems: "center",
-    marginTop: 20,
-  },
-  createButton: {
-    backgroundColor: "#459cffff",
-    padding: 15,
-    borderRadius: 8,
-    width: 300,
-    alignItems: "center",
-    marginTop: 20,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-});

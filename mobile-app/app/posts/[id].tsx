@@ -5,6 +5,8 @@ import PostDetails from "@/components/reports/PostDetails";
 import BackButton from "@/components/common/BackButton";
 import { Post } from "@/lib/types";
 import { useTheme } from "@/context/ThemeContext";
+import { SafeAreaView } from "react-native-safe-area-context";
+import ThemeCycleButton from "@/components/theming/ThemeCycleButton";
 
 export default function PostDetailScreen() {
   const { post: postString } = useLocalSearchParams<{ post: string }>();
@@ -18,7 +20,12 @@ export default function PostDetailScreen() {
     return (
       // ✅ Styles are now applied from your dynamic stylesheet
       <View style={styles.centered}>
-        <Text style={styles.errorText}>Post data not found.</Text>
+        <SafeAreaView
+          edges={["top", "left", "right", "bottom"]}
+          style={{ flex: 1 }}
+        >
+          <Text style={styles.errorText}>Post data not found.</Text>
+        </SafeAreaView>
       </View>
     );
   }
@@ -28,6 +35,7 @@ export default function PostDetailScreen() {
 
   return (
     <>
+      <ThemeCycleButton></ThemeCycleButton>
       <Stack.Screen
         options={{
           title: post.title,

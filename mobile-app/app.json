@@ -12,17 +12,18 @@
       "supportsTablet": true
     },
     "android": {
-       "usesCleartextTraffic": true,
-       
-      "abiFilters": ["arm64-v8a"],
+      "usesCleartextTraffic": true,
+      "abiFilters": [
+        "arm64-v8a"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": false,
+      "edgeToEdgeEnabled": true,
       "androidStatusBar": {
-      "translucent": false
-    },
+        "translucent": true
+      },
       "package": "com.anonymous.CivicApp"
     },
     "web": {
@@ -40,7 +41,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "react-native-edge-to-edge"
     ],
     "experiments": {
       "typedRoutes": true
