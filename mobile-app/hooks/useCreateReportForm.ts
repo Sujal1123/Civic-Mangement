@@ -34,7 +34,38 @@ export function useCreateReportForm() {
             setMediaList((prev) => [...prev, ...newMedia]);
         }
     };
+    const captureMedia = async () => {
+        // 1. Request Camera permissions (different from Media Library)
+        const permission = await ImagePicker.requestCameraPermissionsAsync();
+        if (!permission.granted) {
+            Alert.alert("Permission required", "Allow access to your camera.");
+            return;
+        }
 
+        // 2. Launch the camera
+        const result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All, // Matches your pickMedia settings
+            quality: 1,
+            allowsEditing: false,
+        });
+
+        // 3. Process the result to match your data structure
+        if (!result.canceled && result.assets && result.assets.length > 0) {
+            const asset = result.assets[0]; // Camera returns only one asset
+            const type = asset.type === "video" ? "video" : "image";
+            const fileExtension = type === "video" ? "mp4" : "jpg";
+
+            // 4. Create the exact same object shape
+            const newMediaItem = {
+                uri: asset.uri,
+                type: type,
+                name: `${uuid.v4()}.${fileExtension}`,
+            };
+
+            // 5. Add the single new item to your mediaList
+            setMediaList((prev) => [...prev, newMediaItem]);
+        }
+    };
     const savePost = async () => {
         if (!title || !description) {
             Alert.alert("Incomplete data", "Please fill all fields.");
@@ -78,6 +109,7 @@ export function useCreateReportForm() {
         mediaList,
         loading,
         pickMedia,
+        captureMedia,
         savePost,
     };
 }

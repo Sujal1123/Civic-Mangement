@@ -1,4 +1,5 @@
 import { AppColorPalette, Palette } from "@/constants/Palette";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, {
   createContext,
   useState,
@@ -10,16 +11,15 @@ import { useColorScheme, Appearance } from "react-native";
 
 // ✅ The theme can now be one of three options
 export type ThemeOption = "system" | "light" | "dark";
+const THEME_STORAGE_KEY = "@userTheme";
 
 type ThemeContextType = {
-  // This is the user's selected preference (e.g., 'system')
   themeOption: ThemeOption;
-  // This is the actual theme being applied ('light' or 'dark')
   effectiveTheme: "light" | "dark";
-  setThemeOption: (option: ThemeOption) => void;
   colors: AppColorPalette;
+  isThemeLoaded: boolean; // We add this so the app can wait for the theme
+  setThemeOption: (option: ThemeOption) => void;
 };
-
 export const ThemeContext = createContext<ThemeContextType | undefined>(
   undefined
 );
@@ -30,6 +30,27 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [effectiveTheme, setEffectiveTheme] = useState<"light" | "dark">(
     systemTheme
   );
+  // Add a loading state to prevent a "theme flash" on startup
+  const [isThemeLoaded, setIsThemeLoaded] = useState(false);
+
+  // --- LOGIC TO LOAD THE SAVED THEME ON APP START ---
+  useEffect(() => {
+    const loadSavedTheme = async () => {
+      try {
+        const savedOption = await AsyncStorage.getItem(THEME_STORAGE_KEY);
+        if (savedOption) {
+          setThemeOption(savedOption as ThemeOption);
+        }
+      } catch (e) {
+        console.warn("Failed to load theme from storage", e);
+      } finally {
+        // Mark the theme as loaded so the app can render
+        setIsThemeLoaded(true);
+      }
+    };
+
+    loadSavedTheme();
+  }, []);
 
   useEffect(() => {
     // Determine the actual theme to apply
@@ -46,10 +67,30 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     });
     return () => subscription.remove();
   }, [themeOption]);
+
+  const updateAndSaveTheme = async (newOption: ThemeOption) => {
+    try {
+      // 1. Save the choice to the device disk
+      await AsyncStorage.setItem(THEME_STORAGE_KEY, newOption);
+      // 2. Update the React state
+      setThemeOption(newOption);
+    } catch (e) {
+      console.warn("Failed to save theme choice", e);
+    }
+  };
   const colors = Palette(effectiveTheme);
+  if (!isThemeLoaded) {
+    return null;
+  }
   return (
     <ThemeContext.Provider
-      value={{ themeOption, effectiveTheme, setThemeOption, colors }}
+      value={{
+        themeOption,
+        effectiveTheme,
+        colors,
+        isThemeLoaded,
+        setThemeOption: updateAndSaveTheme, // Use the new save function
+      }}
     >
       {children}
     </ThemeContext.Provider>

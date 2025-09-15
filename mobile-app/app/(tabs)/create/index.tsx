@@ -1,5 +1,15 @@
+///fix capture logics like picker logic
+
 import React from "react";
-import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import { useCreateReportForm } from "@/hooks/useCreateReportForm";
 import ReportForm from "@/components/reports/ReportForm";
 import MediaPicker from "@/components/reports/MediaPicker";
@@ -8,6 +18,7 @@ import ThemeCycleButton from "@/components/theming/ThemeCycleButton";
 import { useTheme } from "@/hooks/useTheme";
 import { useStylePalette } from "@/constants/StylePalette";
 
+const { width, height } = Dimensions.get("window");
 export default function CreateScreen() {
   const {
     title,
@@ -17,6 +28,7 @@ export default function CreateScreen() {
     mediaList,
     loading,
     pickMedia,
+    captureMedia,
     savePost,
   } = useCreateReportForm();
 
@@ -27,12 +39,12 @@ export default function CreateScreen() {
   const styles = useStylePalette();
   return (
     <View style={[styles.tabcontainer]}>
-      <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
+      <SafeAreaView edges={["top", "bottom"]} style={{ flex: 1 }}>
         <ThemeCycleButton></ThemeCycleButton>
         <ScrollView
           contentContainerStyle={[
             cstyles.container,
-            { alignItems: "center", padding: 0 },
+            { alignSelf: "center", padding: 0 },
           ]}
         >
           <Text style={[styles.title, { textAlign: "center" }]}>
@@ -46,13 +58,26 @@ export default function CreateScreen() {
             setDescription={setDescription}
           />
 
-          <MediaPicker mediaList={mediaList} onPickMedia={pickMedia} />
-
-          <Button
-            title={loading ? "Submitting..." : "Submit Report"}
+          <MediaPicker
+            mediaList={mediaList}
+            onPickMedia={pickMedia}
+            onCaptureMedia={captureMedia}
+          />
+          <TouchableOpacity
+            style={[
+              styles.simpleButton,
+              {
+                backgroundColor: colors.buttonLoginBg,
+                paddingVertical: 10,
+              },
+            ]}
             onPress={savePost}
             disabled={loading}
-          />
+          >
+            <Text style={[styles.buttonText, { fontSize: 18 }]}>
+              {loading ? "Submitting...." : "Submit Report"}
+            </Text>
+          </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>
     </View>
@@ -65,7 +90,7 @@ export const getStyles = (theme: "light" | "dark") => {
   const { colors } = useTheme();
   return StyleSheet.create({
     container: {
-      flexGrow: 1,
+      flexGrow: 0,
     },
     heading: {
       fontSize: 24,

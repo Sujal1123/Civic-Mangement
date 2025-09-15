@@ -41,6 +41,13 @@ export const useStylePalette = () => {
                 alignItems: "center",
                 backgroundColor: colors.subbackground, // Applied dynamic background
             },
+            simpleButton: {
+                backgroundColor: colors.buttonLoginBg, // Applied dynamic green
+                padding: 5,
+                borderRadius: 8,
+                alignItems: "center",
+                margin: 10,
+            },
             loginButton: {
                 backgroundColor: colors.buttonLoginBg, // Applied dynamic green
                 padding: 15,
