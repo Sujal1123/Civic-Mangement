@@ -40,45 +40,39 @@ export default function CreateScreen() {
   return (
     <View style={[styles.tabcontainer]}>
       <SafeAreaView edges={["top", "bottom"]} style={{ flex: 1 }}>
-        <ThemeCycleButton></ThemeCycleButton>
-        <ScrollView
-          contentContainerStyle={[
-            cstyles.container,
-            { alignSelf: "center", padding: 0 },
+        <ThemeCycleButton style={{ opacity: 0 }}></ThemeCycleButton>
+
+        <Text style={[styles.title, { textAlign: "center" }]}>
+          Create New Report.
+        </Text>
+
+        <ReportForm
+          title={title}
+          setTitle={setTitle}
+          description={description}
+          setDescription={setDescription}
+        />
+
+        <MediaPicker
+          mediaList={mediaList}
+          onPickMedia={pickMedia}
+          onCaptureMedia={captureMedia}
+        />
+        <TouchableOpacity
+          style={[
+            styles.simpleButton,
+            {
+              backgroundColor: colors.buttonLoginBg,
+              paddingVertical: 10,
+            },
           ]}
+          onPress={savePost}
+          disabled={loading}
         >
-          <Text style={[styles.title, { textAlign: "center" }]}>
-            Create New Report
+          <Text style={[styles.buttonText, { fontSize: 18 }]}>
+            {loading ? "Submitting...." : "Submit Report"}
           </Text>
-
-          <ReportForm
-            title={title}
-            setTitle={setTitle}
-            description={description}
-            setDescription={setDescription}
-          />
-
-          <MediaPicker
-            mediaList={mediaList}
-            onPickMedia={pickMedia}
-            onCaptureMedia={captureMedia}
-          />
-          <TouchableOpacity
-            style={[
-              styles.simpleButton,
-              {
-                backgroundColor: colors.buttonLoginBg,
-                paddingVertical: 10,
-              },
-            ]}
-            onPress={savePost}
-            disabled={loading}
-          >
-            <Text style={[styles.buttonText, { fontSize: 18 }]}>
-              {loading ? "Submitting...." : "Submit Report"}
-            </Text>
-          </TouchableOpacity>
-        </ScrollView>
+        </TouchableOpacity>
       </SafeAreaView>
     </View>
   );

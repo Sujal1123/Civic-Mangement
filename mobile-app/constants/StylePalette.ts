@@ -96,7 +96,7 @@ export const useStylePalette = () => {
                 padding: 10,
                 width: width * 0.9,
                 marginBottom: 15,
-                borderRadius: 8,
+                borderRadius: 8, alignSelf: "center",
             }, adminNote: {
                 color: colors.textAdmin, // Applied dynamic admin red
                 margin: 10,
@@ -107,6 +107,13 @@ export const useStylePalette = () => {
                 margin: 10,
                 textAlign: "center",
                 width: width * 0.8,
+            },
+            separator: {
+                height: 1, // Makes it a thin line
+                width: '100%',
+                backgroundColor: colors.border, // A light gray color, adjust as needed
+                alignSelf: 'center', // Centers the line
+                marginVertical: 20,  // Space above and below the line
             },
         }),
         [colors, effectiveTheme]); // 3. Dependencies for the memoization

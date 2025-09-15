@@ -29,21 +29,27 @@ export default function WelcomeContent() {
         style={cstyles.gradient}
       />*/}
 
+      <Text></Text>
       <Text style={styles.subtitle2}></Text>
-      <Text style={styles.title}>Welcome to CivicLink</Text>
-
-      <Text style={styles.subtitle2}></Text>
-      <Text style={styles.subtitle1}>
-        The simplest way to get civic problems solved.
+      <Text
+        style={[
+          styles.title,
+          { backgroundColor: "#00ff1557", borderRadius: 10, padding: 10 },
+        ]}
+      >
+        Welcome to CivicSync
       </Text>
       <Text style={styles.subtitle2}></Text>
-      <Text style={styles.subtitle1}>
+      <Text style={[styles.subtitle1, { textAlign: "center", width: "90%" }]}>
+        The simplest way to get civic problems solved.
+      </Text>
+      <Text style={[styles.subtitle1, { marginBottom: 0 }]}>
         Click The button below to get started!
       </Text>
 
-      <Text style={styles.subtitle2}></Text>
+      <Text style={{ fontSize: 30 }}>{"\u2193"}</Text>
       <TouchableOpacity
-        style={cstyles.getStartedButton}
+        style={styles.loginButton}
         onPress={() => router.push("/choice")}
       >
         <Text style={styles.buttonText}>Get Started</Text>
@@ -54,7 +60,7 @@ export default function WelcomeContent() {
         style={cstyles.learnMoreButton}
         onPress={() => router.push("/choice")}
       >
-        <Text style={styles.buttonText}>Learn More</Text>
+        <Text style={[styles.buttonText]}>Learn More</Text>
       </TouchableOpacity>
     </View>
   );
@@ -100,8 +106,8 @@ export const getStyles = (theme: "light" | "dark") => {
     },
     learnMoreButton: {
       backgroundColor: colors.buttonCreateBg,
-      paddingVertical: 15,
-      paddingHorizontal: 60,
+      paddingVertical: 10,
+      paddingHorizontal: 40,
       borderRadius: 30,
       marginTop: 10,
       alignItems: "center",

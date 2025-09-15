@@ -32,7 +32,7 @@ export function useRegisterForm() {
     };
 
     const navigateToLogin = () => {
-        router.push({ pathname: "/login", params: { type: "citizen" } });
+        router.replace({ pathname: "/login", params: { type: "citizen" } });
     };
 
     return {

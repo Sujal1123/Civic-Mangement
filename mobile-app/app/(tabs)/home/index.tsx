@@ -21,7 +21,7 @@ export default function FeedScreen() {
     return (
       <View style={styles.tabcontainer}>
         <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
-          <ThemeCycleButton></ThemeCycleButton>
+          <ThemeCycleButton style={{ opacity: 0 }}></ThemeCycleButton>
           <Text style={cstyles.loadingText}>Loading...</Text>
         </SafeAreaView>
       </View>
@@ -30,9 +30,9 @@ export default function FeedScreen() {
 
   return (
     <View style={styles.tabcontainer}>
-      <SafeAreaView edges={["top", "bottom"]} style={{ flex: 1 }}>
-        <ThemeCycleButton></ThemeCycleButton>
-        <Text style={styles.title}>Welcome Back, {user?.name}</Text>
+      <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
+        <ThemeCycleButton style={{ opacity: 0 }}></ThemeCycleButton>
+        <Text style={styles.title}>Welcome Back, Jayant{/*user?.name*/}</Text>
         <ReportList posts={posts} />
       </SafeAreaView>
     </View>

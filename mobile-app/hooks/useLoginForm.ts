@@ -28,7 +28,7 @@ export function useLoginForm() {
     };
 
     const navigateToRegister = () => {
-        router.push('/register');
+        router.replace('/register');
     };
 
     return {

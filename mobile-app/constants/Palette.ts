@@ -37,6 +37,7 @@ export const Palette = (theme: "light" | "dark") => {
     const colors = {
         // General
         background: isDark ? "#000000ff" : "#d2fdd4ff",
+        profileBackground: isDark ? "#011b00ff" : "#d2fdd4ff",
         tabBackground: isDark ? "#000000ff" : "#ecffefff",
         text: isDark ? "#ECEDEE" : "#11181C",
         title: isDark ? "#FFFFFF" : "#333333",

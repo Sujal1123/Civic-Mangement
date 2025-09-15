@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "CivicApp",
-    "slug": "CivicApp",
+    "name": "CivicSync",
+    "slug": "CivicSync",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -24,7 +24,7 @@
       "androidStatusBar": {
         "translucent": true
       },
-      "package": "com.anonymous.CivicApp"
+      "package": "com.anonymous.CivicSync"
     },
     "web": {
       "bundler": "metro",

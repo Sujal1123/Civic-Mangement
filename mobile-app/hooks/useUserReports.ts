@@ -22,7 +22,7 @@ export function useUserReports() {
                     ? [{ uri: report.photoUrl, type: 'image', name: 'report-image' }]
                     : [],
             }));
-            setPosts(formattedPosts.reverse());
+            setPosts(formattedPosts);  ///.reverse() for old to new
         } catch (error) {
             console.error("Error loading posts:", error);
         } finally {

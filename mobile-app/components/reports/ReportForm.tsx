@@ -24,7 +24,7 @@ export default function ReportForm({
   return (
     <View>
       <TextInput
-        style={styles.input}
+        style={[styles.input]}
         placeholder="Enter Title"
         value={title}
         onChangeText={setTitle}

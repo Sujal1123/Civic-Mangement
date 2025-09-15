@@ -16,7 +16,7 @@ export default function SettingsScreen() {
   return (
     <View style={[styles.tabcontainer, { flex: 1 }]}>
       <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
-        <ThemeCycleButton></ThemeCycleButton>
+        <ThemeCycleButton style={{ opacity: 0 }}></ThemeCycleButton>
         <Text style={styles.title}>Settings</Text>
 
         <ThemeSetting />

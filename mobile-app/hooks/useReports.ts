@@ -27,7 +27,7 @@ export function useReports() {
                     ? [{ uri: report.photoUrl, type: 'image', name: report.photoUrl.split('/').pop() || 'report-image' }]
                     : [],
             }));
-            setPosts(formattedPosts.reverse());
+            setPosts(formattedPosts);
         } catch (err: any) {
             console.error("Error loading posts:", err);
             setError("Failed to load reports.");

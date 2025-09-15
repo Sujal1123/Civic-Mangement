@@ -37,7 +37,7 @@ export default function ProfileScreen() {
     return (
       <View style={styles.tabcontainer}>
         <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
-          <ThemeCycleButton></ThemeCycleButton>
+          <ThemeCycleButton style={{ opacity: 0 }}></ThemeCycleButton>
           <Text style={cstyles.loadingText}>Loading...</Text>
         </SafeAreaView>
       </View>
@@ -47,9 +47,67 @@ export default function ProfileScreen() {
   return (
     <View style={styles.tabcontainer}>
       <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
-        <ThemeCycleButton></ThemeCycleButton>
-        <Text style={styles.title}>👤 My Submitted Reports</Text>
-        <ScrollView>
+        <ThemeCycleButton style={{ opacity: 0 }}></ThemeCycleButton>
+
+        {/* --- ADD THIS USER INFO BLOCK --- */}
+        {user && (
+          <View style={cstyles.userInfoContainer}>
+            {/* 1. Profile Icon */}
+            <View style={cstyles.profileIcon}>
+              <Text style={cstyles.profileIconText}>👤</Text>
+            </View>
+
+            {/* 2. User Text Info */}
+            <View style={cstyles.userInfoTextContainer}>
+              <Text
+                style={[
+                  styles.title,
+                  { marginBottom: 3, textAlignVertical: "top" },
+                ]}
+              >
+                Jayant{/*user.name*/}
+              </Text>
+              <Text
+                style={[
+                  styles.subtitle,
+                  { marginBottom: 3, textAlign: "left" },
+                ]}
+              >
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    textDecorationLine: "underline",
+                  }}
+                >
+                  Role:
+                </Text>{" "}
+                {user.role}
+              </Text>
+              <Text
+                style={[
+                  styles.subtitle,
+                  { marginBottom: 0, textAlign: "left" },
+                ]}
+              >
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    textDecorationLine: "underline",
+                  }}
+                >
+                  Total Reports:
+                </Text>{" "}
+                {posts.length}
+              </Text>
+            </View>
+          </View>
+        )}
+        {/* 👤--- END OF USER INFO BLOCK --- */}
+        <View style={[styles.separator, {}]} />
+        <Text style={[styles.title, { marginBottom: 5 }]}>
+          My Submitted Reports
+        </Text>
+        <ScrollView style={{ width: "90%", alignSelf: "center" }}>
           {posts.length > 0 ? (
             posts.map((post) => (
               <PostCard
@@ -78,7 +136,40 @@ export const getStyles = (theme: "light" | "dark") => {
   const isDark = theme === "dark";
 
   const { colors } = useTheme();
+  const profilesize = 40;
   return StyleSheet.create({
+    userInfoContainer: {
+      flexDirection: "row", // Lays out icon and text side-by-side
+      alignItems: "center", // Vertically centers the icon with the text block
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+      marginBottom: 20,
+      backgroundColor: colors.profileBackground,
+      borderRadius: 10,
+      alignSelf: "center",
+      width: "95%",
+    },
+
+    // ADD this new style for the icon
+    profileIcon: {
+      width: profilesize * 2,
+      height: profilesize * 2,
+      borderRadius: profilesize, // Makes it a circle
+      backgroundColor: "#e0e0e0", // A light grey background
+      justifyContent: "center",
+      alignItems: "center",
+      marginRight: 15, // Space between icon and text
+    },
+
+    // ADD this new style for the icon's text (the emoji)
+    profileIconText: {
+      fontSize: profilesize,
+    },
+
+    // ADD this new style to wrap the text
+    userInfoTextContainer: {
+      flex: 1, // Ensures text block takes up remaining space
+    },
     container: {
       flex: 1,
     },
