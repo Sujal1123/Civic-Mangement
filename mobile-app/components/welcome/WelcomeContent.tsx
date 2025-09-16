@@ -47,7 +47,7 @@ export default function WelcomeContent() {
         Click The button below to get started!
       </Text>
 
-      <Text style={{ fontSize: 30 }}>{"\u2193"}</Text>
+      <Text style={{ fontSize: 30, color: colors.subtitle }}>{"\u2193"}</Text>
       <TouchableOpacity
         style={styles.loginButton}
         onPress={() => router.push("/choice")}

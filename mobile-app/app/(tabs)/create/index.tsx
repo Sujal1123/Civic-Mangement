@@ -52,18 +52,32 @@ export default function CreateScreen() {
           description={description}
           setDescription={setDescription}
         />
-
+        <View style={[styles.separator, {}]} />
+        <Text
+          style={[
+            styles.subtitle,
+            {
+              textAlign: "center",
+              marginBottom: 10,
+            },
+          ]}
+        >
+          Add Photos and Videos
+        </Text>
         <MediaPicker
           mediaList={mediaList}
           onPickMedia={pickMedia}
           onCaptureMedia={captureMedia}
         />
+        <View style={[styles.separator, {}]} />
         <TouchableOpacity
           style={[
             styles.simpleButton,
             {
               backgroundColor: colors.buttonLoginBg,
+              alignSelf: "center",
               paddingVertical: 10,
+              width: "90%",
             },
           ]}
           onPress={savePost}

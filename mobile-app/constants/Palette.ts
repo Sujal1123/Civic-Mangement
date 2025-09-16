@@ -30,23 +30,32 @@ export const Palette = (theme: "light" | "dark") => {
 /**
  * This function generates a theme-aware color object.
  */
+
+
+
+/**p1
+ * #FF6500
+ * #1E3E62
+ * #0B192C
+ * #000B58
+ */
 export const Palette = (theme: "light" | "dark") => {
     const isDark = theme === "dark";
 
     //commons
     const colors = {
         // General
-        background: isDark ? "#000000ff" : "#d2fdd4ff",
-        profileBackground: isDark ? "#011b00ff" : "#d2fdd4ff",
-        tabBackground: isDark ? "#000000ff" : "#ecffefff",
-        text: isDark ? "#ECEDEE" : "#11181C",
+        background: isDark ? "#000000ff" : "#fffae4",
+        profileBackground: isDark ? "#dd7129" : "#fdfad2ff",
+        tabBackground: isDark ? "#000000ff" : "#fffbecff",
+        text: isDark ? "#eeeeecff" : "#11181C",
         title: isDark ? "#FFFFFF" : "#333333",
         subtitle: isDark ? "#FFFFFF" : "#333333",
-        subbackground: isDark ? "#ffffff04" : "#d2fdd4ff",
+        subbackground: isDark ? "#ffffff04" : "#fdf7d2ff",
         // Inputs
-        inputBorder: isDark ? "#555555" : "#ccc",
+        inputBorder: isDark ? "#555555" : "#ccccccff",
         inputText: isDark ? "#FFFFFF" : "#000000",
-        Inputbackground: isDark ? "#ffffff69" : "#ffffffff",
+        Inputbackground: isDark ? "#68686869" : "#ffffffff",
         PlaceholderText: isDark ? "#FFFFFF" : "#000000",
 
         // Semantic Colors
@@ -54,10 +63,12 @@ export const Palette = (theme: "light" | "dark") => {
         textSuccess: isDark ? "#69DB7C" : "#006400",
 
         // Buttons
-        buttonLoginBg: isDark ? "#4CAF50" : "#4CAF50",
-        buttonCreateBg: isDark ? "#459cff" : "#007BFF",
+        buttonLoginBg: isDark ? "#dd7129" : "#dd7129",
+        buttonCreateBg: isDark ? "#007BFF" : "#007BFF",
+        mediaAddButton: isDark ? "#007BFF" : "#007BFF",
         buttonText: "#fafcffff",
         proceedbuttoncolor: isDark ? "#4CAF50" : "#4CAF50",
+        buttonborder: isDark ? "#4CAF50" : "#4CAF50",
 
         // Add your theme button colors here from the comments
         themeButton: isDark ? "#202020ff" : "#f3ffefff",
@@ -67,16 +78,16 @@ export const Palette = (theme: "light" | "dark") => {
         welcomeGradientEnd: isDark ? "#000000ff" : "#d2fdd4ff",
 
         //Home Nav Bar    // --- Tab Bar Colors ---
-        card: isDark ? "#212529" : "#F8F9FA",
+        card: isDark ? "#13263bff" : "#fdd87d",
         border: isDark ? "#343A40" : "#DEE2E6",
         tabLabelActive: isDark ? "#FFFFFF" : "#000000",
-        tabLabelInactive: isDark ? "#9cad97ff" : "#3a3f39ff",
+        tabLabelInactive: isDark ? "#585858ff" : "#3a3f39ff",
         tabIconActive: isDark ? "#007BFF" : "#007BFF",
-        tabIconInactive: isDark ? "#495057" : "#ADB5BD",
+        tabIconInactive: isDark ? "#585858ff" : "#ADB5BD",
 
         //Card Colors
         //Card1
-        cardBackground: isDark ? "#3f3f3fff" : "#d9fadbff",
+        cardBackground: isDark ? "#000842ff" : "#ffeec3ff",
         cardTitle: isDark ? "#FFFFFF" : "#000000",
         CardDescription: isDark ? "#d6d6d6ff" : "#1f1f1fff",
         cardDate: isDark ? "#84e6ffff" : "#121f22ff",

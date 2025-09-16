@@ -38,7 +38,8 @@ export default function MediaPicker({
             styles.simpleButton,
             {
               width: width * 0.4,
-              backgroundColor: colors.buttonCreateBg,
+              backgroundColor: colors.mediaAddButton,
+              paddingVertical: 10,
             },
           ]}
           onPress={onPickMedia}
@@ -52,7 +53,8 @@ export default function MediaPicker({
             styles.simpleButton,
             {
               width: width * 0.4,
-              backgroundColor: colors.buttonCreateBg,
+              backgroundColor: colors.mediaAddButton,
+              paddingVertical: 10,
             },
           ]}
           onPress={onCaptureMedia}
