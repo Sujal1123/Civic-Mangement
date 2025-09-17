@@ -10,10 +10,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useTheme } from "@/context/ThemeContext";
 import { useStylePalette } from "@/constants/StylePalette";
+import { useTranslations } from "@/context/LanguageContext";
+import LanguagePicker from "../settings/LanguageSetting";
 const { width, height } = Dimensions.get("screen");
 export default function WelcomeContent() {
   const router = useRouter();
 
+  // This hook still returns the correct 'strings' object
+  const { strings } = useTranslations();
   // 1. Get the effective theme ('light' or 'dark')
   const { effectiveTheme, colors } = useTheme();
   // 2. Pass the theme to the styles function
@@ -34,17 +38,22 @@ export default function WelcomeContent() {
       <Text
         style={[
           styles.title,
-          { backgroundColor: "#00ff1557", borderRadius: 10, padding: 10 },
+          {
+            backgroundColor: "#00ff1557",
+            borderRadius: 10,
+            padding: 10,
+            fontSize: 24,
+          },
         ]}
       >
-        Welcome to CivicSync
+        {strings.welcomeScreen.title}
       </Text>
       <Text style={styles.subtitle2}></Text>
       <Text style={[styles.subtitle1, { textAlign: "center", width: "90%" }]}>
-        The simplest way to get civic problems solved.
+        {strings.welcomeScreen.subtitle1}
       </Text>
       <Text style={[styles.subtitle1, { marginBottom: 0 }]}>
-        Click The button below to get started!
+        {strings.welcomeScreen.subtitle2}
       </Text>
 
       <Text style={{ fontSize: 30, color: colors.subtitle }}>{"\u2193"}</Text>
@@ -52,15 +61,21 @@ export default function WelcomeContent() {
         style={styles.loginButton}
         onPress={() => router.push("/choice")}
       >
-        <Text style={styles.buttonText}>Get Started</Text>
+        <Text style={styles.buttonText}>
+          {strings.welcomeScreen.getStartedButton}
+        </Text>
       </TouchableOpacity>
 
+      <Text></Text>
+      <LanguagePicker />
       <Text></Text>
       <TouchableOpacity
         style={cstyles.learnMoreButton}
         onPress={() => router.push("/choice")}
       >
-        <Text style={[styles.buttonText]}>Learn More</Text>
+        <Text style={[styles.buttonText]}>
+          {strings.welcomeScreen.learnMoreButton}
+        </Text>
       </TouchableOpacity>
     </View>
   );

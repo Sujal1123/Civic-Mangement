@@ -1,4 +1,4 @@
-package com.anonymous.CivicApp
+package com.anonymous.CivicSync
 
 import android.app.Application
 import android.content.res.Configuration

@@ -7,6 +7,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@/hooks/useTheme";
+import { Entypo } from "@expo/vector-icons";
 
 export default function TabsLayout() {
   const { user, loading } = useAuth();
@@ -77,8 +78,8 @@ export default function TabsLayout() {
         options={{
           title: "Create",
           tabBarIcon: ({ focused }) => (
-            <AntDesign
-              name="pluscircle"
+            <Entypo
+              name="circle-with-plus"
               size={24}
               color={focused ? colors.tabIconActive : colors.tabIconInactive}
             />

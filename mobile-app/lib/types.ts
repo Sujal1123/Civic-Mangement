@@ -47,3 +47,13 @@ export type ThemeCycleButtonProps = {
     size?: number;
     color?: string;
 };
+export interface TranslationStrings {
+    welcome: string;
+    submitReport: string;
+    myReports: string;
+    profile: {
+        title: string;
+        role: string;
+        totalReports: string;
+    };
+}

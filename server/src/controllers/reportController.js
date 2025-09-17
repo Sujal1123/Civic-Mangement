@@ -1,6 +1,7 @@
 // controllers/reportController.js
 import Report from "../models/Report.js";
 import { successResponse, errorResponse } from "../utils/response.js";
+import upload from "../middlewares/uploadMiddleware.js";
 
 // Citizen: Create a new report
 export const createReport = async (req, res) => {
@@ -12,7 +13,8 @@ export const createReport = async (req, res) => {
       description,
       location,
       category,
-      photoUrl: req.file ? `/uploads/${req.file.filename}` : null, // if using multer
+      // This will save the new "https://res.cloudinary.com/..." URL
+photoUrl: req.file ? req.file.path : null, // if using multer
       createdBy: req.user._id,
     });
 

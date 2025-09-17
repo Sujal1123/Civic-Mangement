@@ -6,6 +6,7 @@ import ThemeCycleButton from "@/components/theming/ThemeCycleButton";
 import { useTheme } from "@/hooks/useTheme";
 import { useStylePalette } from "@/constants/StylePalette";
 import { SafeAreaView } from "react-native-safe-area-context";
+import LanguagePicker from "@/components/settings/LanguageSetting";
 
 export default function SettingsScreen() {
   // 1. Get the effective theme ('light' or 'dark')
@@ -20,6 +21,7 @@ export default function SettingsScreen() {
         <Text style={styles.title}>Settings</Text>
 
         <ThemeSetting />
+        <LanguagePicker />
         <LogoutButton />
         <DeleteAccountButton />
       </SafeAreaView>

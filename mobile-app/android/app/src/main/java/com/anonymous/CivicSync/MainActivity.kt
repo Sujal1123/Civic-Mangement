@@ -1,4 +1,4 @@
-package com.anonymous.CivicApp
+package com.anonymous.CivicSync
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

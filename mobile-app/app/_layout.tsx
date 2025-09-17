@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { useNavigationBar } from "@/hooks/usenavigationBar";
 import { SystemBars } from "react-native-edge-to-edge";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 // A component to handle the initial loading and routing logic
 function Root() {
@@ -31,9 +32,11 @@ function Root() {
 export default function RootLayout() {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <Root />
-      </AuthProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <Root />
+        </AuthProvider>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }
