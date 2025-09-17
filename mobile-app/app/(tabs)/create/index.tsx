@@ -1,24 +1,21 @@
-///fix capture logics like picker logic
-
 import React from "react";
 import {
   StyleSheet,
   Text,
   View,
-  Button,
-  ScrollView,
   TouchableOpacity,
   Dimensions,
 } from "react-native";
 import { useCreateReportForm } from "@/hooks/useCreateReportForm";
 import ReportForm from "@/components/reports/ReportForm";
-import MediaPicker from "@/components/reports/MediaPicker";
+// 1. MediaPicker is no longer imported here
 import { SafeAreaView } from "react-native-safe-area-context";
 import ThemeCycleButton from "@/components/theming/ThemeCycleButton";
 import { useTheme } from "@/hooks/useTheme";
 import { useStylePalette } from "@/constants/StylePalette";
 
 const { width, height } = Dimensions.get("window");
+
 export default function CreateScreen() {
   const {
     title,
@@ -32,11 +29,9 @@ export default function CreateScreen() {
     savePost,
   } = useCreateReportForm();
 
-  // 1. Get the effective theme ('light' or 'dark')
-  const { effectiveTheme, colors } = useTheme();
-  // 2. Pass the theme to the styles function
-  const cstyles = getStyles(effectiveTheme);
+  const { colors } = useTheme();
   const styles = useStylePalette();
+
   return (
     <View style={[styles.tabcontainer]}>
       <SafeAreaView edges={["top", "bottom"]} style={{ flex: 1 }}>
@@ -46,30 +41,20 @@ export default function CreateScreen() {
           Create New Report.
         </Text>
 
+        {/* 2. Pass all props to ReportForm */}
         <ReportForm
           title={title}
           setTitle={setTitle}
           description={description}
           setDescription={setDescription}
-        />
-        <View style={[styles.separator, {}]} />
-        <Text
-          style={[
-            styles.subtitle,
-            {
-              textAlign: "center",
-              marginBottom: 10,
-            },
-          ]}
-        >
-          Add Photos and Videos
-        </Text>
-        <MediaPicker
+          // --- PASS MEDIA PROPS DOWN ---
           mediaList={mediaList}
           onPickMedia={pickMedia}
           onCaptureMedia={captureMedia}
         />
-        <View style={[styles.separator, {}]} />
+
+        {/* 3. The MediaPicker and separators are REMOVED from here */}
+
         <TouchableOpacity
           style={[
             styles.simpleButton,
@@ -92,19 +77,4 @@ export default function CreateScreen() {
   );
 }
 
-export const getStyles = (theme: "light" | "dark") => {
-  const isDark = theme === "dark";
-
-  const { colors } = useTheme();
-  return StyleSheet.create({
-    container: {
-      flexGrow: 0,
-    },
-    heading: {
-      fontSize: 24,
-      fontWeight: "bold",
-      marginBottom: 20,
-      textAlign: "center",
-    },
-  });
-};
+// 4. Removed the unused getStyles function

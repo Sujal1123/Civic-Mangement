@@ -1,5 +1,4 @@
 import express from "express";
-import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
 import connectDB from "./config/db.js";
@@ -7,7 +6,6 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 
-dotenv.config();
 connectDB();
 
 const app = express();

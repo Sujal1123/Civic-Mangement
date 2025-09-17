@@ -22,6 +22,8 @@ export function useUserReports() {
                     ? [{ uri: report.photoUrl, type: 'image', name: 'report-image' }]
                     : [],
             }));
+
+            console.log("FETCHED REPORT:", formattedPosts); // <-- ADD THIS
             setPosts(formattedPosts);  ///.reverse() for old to new
         } catch (error) {
             console.error("Error loading posts:", error);

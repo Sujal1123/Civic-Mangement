@@ -14,7 +14,8 @@ import {
 const router = express.Router();
 
 // Citizen: submit report with optional photo/video/audio
-router.post("/", authMiddleware, upload.single("media"), createReport);
+// This is the fix
+router.post("/", authMiddleware, upload.array("media", 10), createReport);
 
 // Citizen: view my reports
 router.get("/my", authMiddleware, getMyReports);

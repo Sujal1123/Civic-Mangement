@@ -6,7 +6,8 @@ export async function createReport(
     description: string,
     location?: { lat: number, lng: number },
     category?: string,
-    media?: MediaItem
+
+    mediaList?: MediaItem[],
 ): Promise<Report | null> {
     try {
         const formData = new FormData();
@@ -25,12 +26,15 @@ export async function createReport(
         }
 
         // Append media file if it exists
-        if (media) {
-            formData.append("media", {
-                uri: media.uri,
-                name: media.name,
-                type: media.type === "image" ? "image/jpeg" : "video/mp4",
-            } as any);
+        if (mediaList && mediaList.length > 0) {
+            mediaList.forEach((media, index) => {
+                // The backend expects an array under the *same key*, "media"
+                formData.append("media", {
+                    uri: media.uri,
+                    name: media.name,
+                    type: media.type === "image" ? "image/jpeg" : "video/mp4",
+                } as any);
+            });
         }
 
         const res = await apiClient.post("/reports", formData, {

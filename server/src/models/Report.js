@@ -12,9 +12,18 @@ const reportSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    photoUrl: {
-      type: String, // store image URL (e.g., AWS S3, Cloudinary, or local path)
+    media: [
+  {
+    url: {
+      type: String,
+      required: false // Or true, depending on your logic
     },
+    type: {
+      type: String, // 'image' or 'video'
+      required: false
+    }
+  }
+],
     location: {
       lat: { type: Number, required: true },
       lng: { type: Number, required: true },

@@ -13,57 +13,50 @@ export function useCreateReportForm() {
     const [loading, setLoading] = useState(false);
 
     const pickMedia = async () => {
-        const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (!permission.granted) {
-            Alert.alert("Permission required", "Allow access to media library.");
-            return;
-        }
-
-        const result = await ImagePicker.launchImageLibraryAsync({
+        let result = await ImagePicker.launchImageLibraryAsync({
+            // To fix your warning, use 'MediaTypeOptions'
             mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsMultipleSelection: true,
+            allowsEditing: true,
+            allowsMultipleSelection: true, // Make sure this is true
             quality: 1,
         });
 
-        if (!result.canceled && result.assets.length > 0) {
-            const newMedia = result.assets.map((asset, index) => ({
+        if (!result.canceled && result.assets) {
+            // 1. 'result.assets' is an array. We must map over it.
+            const newItems = result.assets.map(asset => ({
                 uri: asset.uri,
-                type: asset.type === "video" ? "video" : "image",
-                name: `${uuid.v4()}-${index}.${asset.type === "video" ? "mp4" : "jpg"}`,
+                name: asset.fileName || `media-${Date.now()}`,
+                type: asset.type || 'image', // 'image' or 'video'
             }));
-            setMediaList((prev) => [...prev, ...newMedia]);
+
+            // 2. Update the state with the new items
+            setMediaList(prevList => [...prevList, ...newItems]);
         }
     };
     const captureMedia = async () => {
-        // 1. Request Camera permissions (different from Media Library)
-        const permission = await ImagePicker.requestCameraPermissionsAsync();
-        if (!permission.granted) {
-            Alert.alert("Permission required", "Allow access to your camera.");
+        // Request camera permissions first
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted') {
+            alert('Sorry, we need camera permissions to make this work!');
             return;
         }
 
-        // 2. Launch the camera
-        const result = await ImagePicker.launchCameraAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All, // Matches your pickMedia settings
+        let result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
             quality: 1,
-            allowsEditing: false,
         });
 
-        // 3. Process the result to match your data structure
-        if (!result.canceled && result.assets && result.assets.length > 0) {
-            const asset = result.assets[0]; // Camera returns only one asset
-            const type = asset.type === "video" ? "video" : "image";
-            const fileExtension = type === "video" ? "mp4" : "jpg";
-
-            // 4. Create the exact same object shape
-            const newMediaItem = {
+        if (!result.canceled && result.assets) {
+            // 1. 'result.assets' is an array (usually with 1 item for camera)
+            const newItems = result.assets.map(asset => ({
                 uri: asset.uri,
-                type: type,
-                name: `${uuid.v4()}.${fileExtension}`,
-            };
+                name: asset.fileName || `camera-${Date.now()}`,
+                type: asset.type || 'image',
+            }));
 
-            // 5. Add the single new item to your mediaList
-            setMediaList((prev) => [...prev, newMediaItem]);
+            // 2. Update the state
+            setMediaList(prevList => [...prevList, ...newItems]);
         }
     };
     const savePost = async () => {
@@ -80,7 +73,7 @@ export function useCreateReportForm() {
                 { lat: 21.0077, lng: 75.5626 }, // Example: Jalgaon coordinates
                 // ✅ Use a valid category from your schema's enum list
                 "pothole",
-                mediaList[0] // Pass the first media item
+                mediaList // Pass the first media item
             );
             if (response) {
                 Alert.alert("Success", "Report submitted successfully!");

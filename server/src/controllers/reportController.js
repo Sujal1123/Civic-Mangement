@@ -1,20 +1,26 @@
-// controllers/reportController.js
 import Report from "../models/Report.js";
 import { successResponse, errorResponse } from "../utils/response.js";
-import upload from "../middlewares/uploadMiddleware.js";
 
-// Citizen: Create a new report
+// Citizen: Create a new report (This function is correct)
 export const createReport = async (req, res) => {
   try {
     const { title, description, location, category } = req.body;
+
+    let media = [];
+    
+    if (req.files && req.files.length > 0) {
+      media = req.files.map(file => ({
+        url: file.path, 
+        type: file.mimetype.startsWith('image') ? 'image' : 'video'
+      }));
+    }
 
     const report = await Report.create({
       title,
       description,
       location,
       category,
-      // This will save the new "https://res.cloudinary.com/..." URL
-photoUrl: req.file ? req.file.path : null, // if using multer
+      media: media, 
       createdBy: req.user._id,
     });
 
@@ -24,7 +30,7 @@ photoUrl: req.file ? req.file.path : null, // if using multer
   }
 };
 
-// Citizen/Admin: Get all reports (filter by category/status)
+// Citizen/Admin: Get all reports
 export const getReports = async (req, res) => {
   try {
     const { category, status } = req.query;
@@ -36,6 +42,7 @@ export const getReports = async (req, res) => {
     const reports = await Report.find(filter)
       .populate("createdBy", "name email role")
       .populate("assignedTo", "name email role")
+      .select("+media") // ✅ ADDED THIS LINE to include the media array
       .sort({ createdAt: -1 });
 
     return successResponse(res, reports, "Reports fetched successfully");
@@ -44,7 +51,7 @@ export const getReports = async (req, res) => {
   }
 };
 
-// Admin: Update report status
+// Admin: Update report status (This function is correct)
 export const updateReportStatus = async (req, res) => {
   try {
     const { reportId } = req.params;
@@ -66,20 +73,18 @@ export const updateReportStatus = async (req, res) => {
   }
 };
 
-// Citizen: Update their own report
+// Citizen: Update their own report (This function is correct)
 export const updateMyReport = async (req, res) => {
   try {
     const { reportId } = req.params;
-    const { title, description } = req.body; // Only allow title/description edits
+    const { title, description } = req.body; 
 
-    // Find the report only if the ID and the creator match
     const report = await Report.findOne({ _id: reportId, createdBy: req.user._id });
 
     if (!report) {
       return errorResponse(res, "Report not found or you don't have permission to edit it", 404);
     }
 
-    // Update fields and save
     report.title = title || report.title;
     report.description = description || report.description;
     await report.save();
@@ -93,9 +98,11 @@ export const updateMyReport = async (req, res) => {
 // Citizen: Get my reports
 export const getMyReports = async (req, res) => {
   try {
-    const reports = await Report.find({ createdBy: req.user._id }).sort({
-      createdAt: -1,
-    });
+    const reports = await Report.find({ createdBy: req.user._id })
+      .select("+media") // ✅ ADDED THIS LINE to include the media array
+      .sort({
+        createdAt: -1,
+      });
     return successResponse(res, reports, "My reports fetched successfully");
   } catch (error) {
     return errorResponse(res, error.message);

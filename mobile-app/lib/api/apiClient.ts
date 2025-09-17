@@ -2,7 +2,7 @@ import axios from 'axios';
 import { loadUser } from '../storage/userStorage';
 
 const apiClient = axios.create({
-    baseURL: 'http://localhost:5000/api', // Your server's base URL
+    baseURL: 'http://192.168.223.120:5000/api', // Your server's base URL
 });
 
 // Use an interceptor to add the auth token to every API request
