@@ -18,15 +18,39 @@ export function useReports() {
         try {
             const reports: Report[] = await getReports();
             const formattedPosts: Post[] = reports.map((report) => ({
+                // --- Direct Mappings ---
                 id: report._id,
                 title: report.title,
                 description: report.description,
                 createdAt: report.createdAt,
-                // Convert the single photoUrl string into a media array
-                media: report.photoUrl
-                    ? [{ uri: report.photoUrl, type: 'image', name: report.photoUrl.split('/').pop() || 'report-image' }]
-                    : [],
+
+                // --- Mappings for Optional Fields with Defaults ---
+
+                // The 'Report' type has no 'updatedAt', so we use 'createdAt' as a fallback.
+                updatedAt: report.createdAt,
+
+                // If location is missing from the API response, default to a known location (e.g., Nagpur).
+                // This prevents the map component from crashing.
+                location: report.location || { lat: 21.1458, lng: 79.0882, address: 'Nagpur, MH' },
+
+                // Default to 'other' and 'submitted' if these fields are missing.
+                // The 'as Post['category']' cast tells TypeScript that our default value is valid.
+                category: (report.category || 'other') as Post['category'],
+                status: (report.status || 'submitted') as Post['status'],
+
+                // --- User ID Mappings ---
+                createdBy: report.createdBy,
+                assignedTo: report.assignedTo,
+                // --- Transformed Media Array ---
+                // The old 'photoUrl' is replaced with the new 'media' array.
+                // We map each item, changing 'url' to 'uri' for the client.
+                media: (report.media || []).map(mediaItem => ({
+                    url: mediaItem.url,
+                    type: mediaItem.type as 'image' | 'video', // Ensure type correctness
+                    //name: mediaItem.name,
+                })),
             }));
+
             setPosts(formattedPosts);
         } catch (err: any) {
             console.error("Error loading posts:", err);
@@ -73,15 +97,40 @@ export function useReportById(id: string | undefined) {
 
                 // Format the raw API data into the 'Post' shape your components expect
                 const formattedPosts: Post[] = reports.map((report) => ({
+                    // --- Direct Mappings ---
                     id: report._id,
                     title: report.title,
                     description: report.description,
                     createdAt: report.createdAt,
-                    // Convert the single photoUrl string into a media array
-                    media: report.photoUrl
-                        ? [{ uri: report.photoUrl, type: 'image', name: report.photoUrl.split('/').pop() || 'report-image' }]
-                        : [],
+
+                    // --- Mappings for Optional Fields with Defaults ---
+
+                    // The 'Report' type has no 'updatedAt', so we use 'createdAt' as a fallback.
+                    updatedAt: report.createdAt,
+
+                    // If location is missing from the API response, default to a known location (e.g., Nagpur).
+                    // This prevents the map component from crashing.
+                    location: report.location || { lat: 21.1458, lng: 79.0882, address: 'Nagpur, MH' },
+
+                    // Default to 'other' and 'submitted' if these fields are missing.
+                    // The 'as Post['category']' cast tells TypeScript that our default value is valid.
+                    category: (report.category || 'other') as Post['category'],
+                    status: (report.status || 'submitted') as Post['status'],
+
+                    // --- User ID Mappings ---
+                    createdBy: report.createdBy,
+                    assignedTo: report.assignedTo,
+                    // --- Transformed Media Array ---
+                    // The old 'photoUrl' is replaced with the new 'media' array.
+                    // We map each item, changing 'url' to 'uri' for the client.
+                    media: (report.media || []).map(mediaItem => ({
+                        url: mediaItem.url,
+                        type: mediaItem.type as 'image' | 'video', // Ensure type correctness
+                        //name: mediaItem.name,
+                    })),
                 }));
+
+                setPosts(formattedPosts);
 
                 setPosts(formattedPosts);
 

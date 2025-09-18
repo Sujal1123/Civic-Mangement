@@ -1,13 +1,13 @@
 import apiClient from './apiClient';
-import { Report, MediaItem } from '../types';
+import { Report, MediaItem } from '@/lib/types';
 
 export async function createReport(
     title: string,
     description: string,
-    location?: { lat: number, lng: number },
-    category?: string,
-
+    location: { lat: number, lng: number, address: string } = { lat: 21.1458, lng: 79.0882, address: 'Nagpur, MH' },
+    category: "pothole" | "streetlight" | "garbage" | "water" | "other" = "other",
     mediaList?: MediaItem[],
+    status?: "submitted" | "in-progress" | "resolved",
 ): Promise<Report | null> {
     try {
         const formData = new FormData();
@@ -23,6 +23,7 @@ export async function createReport(
         if (location) {
             formData.append("location[lat]", location.lat.toString());
             formData.append("location[lng]", location.lng.toString());
+            //address not implimented
         }
 
         // Append media file if it exists
@@ -30,8 +31,8 @@ export async function createReport(
             mediaList.forEach((media, index) => {
                 // The backend expects an array under the *same key*, "media"
                 formData.append("media", {
-                    uri: media.uri,
-                    name: media.name,
+                    url: media.url,
+                    //name: media.name,
                     type: media.type === "image" ? "image/jpeg" : "video/mp4",
                 } as any);
             });

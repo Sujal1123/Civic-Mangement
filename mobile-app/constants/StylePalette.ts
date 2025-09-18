@@ -28,6 +28,13 @@ export const useStylePalette = () => {
                 backgroundColor: colors.tabBackground, // Applied dynamic background
                 width: "100%",
             },
+            mapContainer: {
+                flex: 1,
+                justifyContent: "center",
+                backgroundColor: colors.background, // Applied dynamic background
+                width: "100%",
+                height: height * 0.3,
+            },
             title: {
                 fontSize: 28,
                 fontWeight: "bold",

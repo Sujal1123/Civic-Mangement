@@ -1,14 +1,25 @@
 import React from "react";
-import { View, Text, Image, ScrollView, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  StyleSheet,
+  FlatList,
+} from "react-native";
 import { Post } from "@/lib/types";
 import { useTheme } from "@/context/ThemeContext";
 import { SafeAreaView } from "react-native-safe-area-context";
+import MapView from "react-native-maps";
+import MapViewComponent from "@/components/maps/MapView";
+import { useStylePalette } from "@/constants/StylePalette";
 
 export default function PostDetails({ post }: { post: Post }) {
   // 1. Get the effective theme ('light' or 'dark')
   const { effectiveTheme } = useTheme();
   // 2. Pass the theme to the styles function
-  const styles = getStyles(effectiveTheme);
+  const cstyles = getStyles(effectiveTheme);
+  const styles = useStylePalette();
 
   return (
     <View style={styles.container}>
@@ -16,19 +27,37 @@ export default function PostDetails({ post }: { post: Post }) {
         edges={["top", "left", "right", "bottom"]}
         style={{ flex: 1 }}
       >
-        <ScrollView style={styles.container}>
-          {post.media.length > 0 && (
-            <Image
-              source={{ uri: post.media[0].uri }}
-              style={styles.mediaImage}
-            />
-          )}
-          <View style={styles.contentContainer}>
-            <Text style={styles.title}>{post.title}</Text>
-            <Text style={styles.date}>
+        <ScrollView style={cstyles.container}>
+          <View style={cstyles.contentContainer}>
+            <Text style={cstyles.title}>{post.title}</Text>
+
+            <View style={[styles.separator, { marginVertical: 3 }]} />
+            <Text style={cstyles.creator}>By: Anonymous(not implemented)</Text>
+            <Text style={cstyles.date}>
               {new Date(post.createdAt).toLocaleDateString()}
             </Text>
-            <Text style={styles.description}>{post.description}</Text>
+            <View style={[styles.mapContainer, {}]}>
+              <MapViewComponent latitude={21.1836} longitude={79.0335} />
+            </View>
+            {post.media && post.media.length > 0 && (
+              <FlatList
+                data={post.media} // The array of images to display
+                renderItem={({ item }) => (
+                  // This function renders one image for each item in the data array
+                  <Image
+                    source={{ uri: item.url }}
+                    style={cstyles.scrollableMediaImage} // Use a new style for list items
+                  />
+                )}
+                keyExtractor={(item) => item.url} // Provides a unique key for each image
+                horizontal={true} // This is the key prop to enable horizontal scrolling
+                showsHorizontalScrollIndicator={false} // Hides the scrollbar for a cleaner look
+                contentContainerStyle={cstyles.mediaListContainer} // Style for the list itself
+              />
+            )}
+
+            <View style={[styles.separator, { marginVertical: 5 }]} />
+            <Text style={cstyles.description}>{post.description}</Text>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -63,10 +92,26 @@ const getStyles = (theme: "light" | "dark") => {
       color: isDark ? "#A0A0A0" : "#777777",
       marginBottom: 16,
     },
+    creator: {
+      fontSize: 14,
+      color: isDark ? "#A0A0A0" : "#777777",
+      marginBottom: 5,
+    },
     description: {
       fontSize: 16,
       lineHeight: 24,
       color: isDark ? "#E0E0E0" : "#333333",
+    },
+    mediaListContainer: {
+      // Add some padding if you want space at the start of the list
+      paddingVertical: 10,
+    },
+    scrollableMediaImage: {
+      width: 320, // Give each image a fixed width
+      height: 200, // Match the height of your original image
+      borderRadius: 8,
+      marginRight: 15, // Add space between the images
+      resizeMode: "cover",
     },
   });
 };

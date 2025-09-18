@@ -12,19 +12,68 @@ export function useUserReports() {
     const fetchPosts = useCallback(async () => {
         setLoading(true);
         try {
-            const reports: Report[] = await getMyReports();
+            // 1. Fetch the raw report data from the API
+            const reports: Report[] = await getMyReports(); // 'Report' should match the server schema
+
+            // 2. Map the server data to the client-side 'Post' type
             const formattedPosts: Post[] = reports.map((report) => ({
+                // --- Direct Mappings ---
                 id: report._id,
                 title: report.title,
                 description: report.description,
                 createdAt: report.createdAt,
-                media: report.photoUrl
-                    ? [{ uri: report.photoUrl, type: 'image', name: 'report-image' }]
-                    : [],
+
+                // --- Mappings for Optional Fields with Defaults ---
+
+                // The 'Report' type has no 'updatedAt', so we use 'createdAt' as a fallback.
+                updatedAt: report.createdAt,
+
+                // If location is missing from the API response, default to a known location (e.g., Nagpur).
+                // This prevents the map component from crashing.
+                location: report.location || { lat: 21.1458, lng: 79.0882, address: 'Nagpur, MH' },
+
+                // Default to 'other' and 'submitted' if these fields are missing.
+                // The 'as Post['category']' cast tells TypeScript that our default value is valid.
+                category: (report.category || 'other') as Post['category'],
+                status: (report.status || 'submitted') as Post['status'],
+
+                // --- User ID Mappings ---
+                createdBy: report.createdBy,
+                assignedTo: report.assignedTo,
+                // --- Transformed Media Array ---
+                // The old 'photoUrl' is replaced with the new 'media' array.
+                // We map each item, changing 'url' to 'uri' for the client.
+                media: (report.media || []).map(mediaItem => ({
+                    url: mediaItem.url,
+                    type: mediaItem.type as 'image' | 'video', // Ensure type correctness
+                    //name: mediaItem.name,
+                })),
+                /*
+                backwards compatibility
+                 media: (() => {
+        // PRIORITY 1: Check for the new `media` array first.
+        // This ensures that if a report has the new structure, we use it.
+        if (report.media && report.media.length > 0) {
+            return report.media.map(mediaItem => ({
+                uri: mediaItem.url, // Mapping server `url` to client `uri`
+                type: mediaItem.type as 'image' | 'video',
+                name: mediaItem.name, 
+            }));
+        }
+
+        // PRIORITY 2: Fallback for older reports that only have `photoUrl`.
+        // This will only run if `report.media` is missing or empty.
+        if (report.photoUrl) {
+            return [{ uri: report.photoUrl, type: 'image', name: 'report-image' }];
+        }
+
+        // FINAL FALLBACK: If neither exists, return an empty array.
+        return [];
+    })(),
+                */
             }));
 
-            console.log("FETCHED REPORT:", formattedPosts); // <-- ADD THIS
-            setPosts(formattedPosts);  ///.reverse() for old to new
+            setPosts(formattedPosts);
         } catch (error) {
             console.error("Error loading posts:", error);
         } finally {
@@ -32,7 +81,7 @@ export function useUserReports() {
         }
     }, []);
 
-    // ✅ FIX: Call the async function from inside the synchronous callback
+    // This part remains correct and does not need to be changed
     useFocusEffect(
         useCallback(() => {
             fetchPosts();

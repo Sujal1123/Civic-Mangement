@@ -24,8 +24,8 @@ export function useCreateReportForm() {
         if (!result.canceled && result.assets) {
             // 1. 'result.assets' is an array. We must map over it.
             const newItems = result.assets.map(asset => ({
-                uri: asset.uri,
-                name: asset.fileName || `media-${Date.now()}`,
+                url: asset.uri,
+                //name: asset.fileName || `media-${Date.now()}`,
                 type: asset.type || 'image', // 'image' or 'video'
             }));
 
@@ -50,8 +50,8 @@ export function useCreateReportForm() {
         if (!result.canceled && result.assets) {
             // 1. 'result.assets' is an array (usually with 1 item for camera)
             const newItems = result.assets.map(asset => ({
-                uri: asset.uri,
-                name: asset.fileName || `camera-${Date.now()}`,
+                url: asset.uri,
+                //name: asset.fileName || `camera-${Date.now()}`,
                 type: asset.type || 'image',
             }));
 
@@ -70,7 +70,7 @@ export function useCreateReportForm() {
                 title,
                 description,
                 // Replace with actual coordinates from a location picker
-                { lat: 21.0077, lng: 75.5626 }, // Example: Jalgaon coordinates
+                { lat: 21.0077, lng: 75.5626, address: "Nagpur" }, // Example: Jalgaon coordinates
                 // ✅ Use a valid category from your schema's enum list
                 "pothole",
                 mediaList // Pass the first media item
