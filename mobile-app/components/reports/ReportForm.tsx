@@ -5,6 +5,7 @@ import React from "react";
 import { View, TextInput, StyleSheet, Text } from "react-native";
 import MediaPicker from "./MediaPicker"; // Assuming MediaPicker is in the same folder
 import { MediaItem } from "@/lib/types"; // Import your MediaItem type
+import LocationPicker from "../common/LocationPicker";
 
 // 1. Update the props
 type ReportFormProps = {
@@ -16,6 +17,9 @@ type ReportFormProps = {
   mediaList: MediaItem[];
   onPickMedia: () => void;
   onCaptureMedia: () => void;
+  location: { lat: number; lng: number } | null;
+  isFetchingLocation: boolean;
+  onFetchLocation: () => void;
 };
 
 export default function ReportForm({
@@ -27,6 +31,9 @@ export default function ReportForm({
   mediaList,
   onPickMedia,
   onCaptureMedia,
+  location,
+  isFetchingLocation,
+  onFetchLocation,
 }: ReportFormProps) {
   const { colors } = useTheme();
   const styles = useStylePalette();
@@ -48,7 +55,11 @@ export default function ReportForm({
         placeholderTextColor={colors.PlaceholderText}
         multiline
       />
-
+      <LocationPicker
+        location={location}
+        loading={isFetchingLocation}
+        onFetchLocation={onFetchLocation}
+      />
       {/* 2. Add the MediaPicker and its surrounding UI */}
       <View style={[styles.separator, {}]} />
       <Text

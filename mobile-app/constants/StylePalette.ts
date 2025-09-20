@@ -104,6 +104,13 @@ export const useStylePalette = () => {
                 width: width * 0.9,
                 marginBottom: 15,
                 borderRadius: 8, alignSelf: "center",
+            },
+            boxborder: {
+                borderWidth: 1,
+                borderColor: colors.inputBorder, // Applied dynamic border
+                backgroundColor: colors.Inputbackground, // Ensure input bg matches theme
+                color: colors.inputText, // Applied dynamic text color
+                borderRadius: 8,
             }, adminNote: {
                 color: colors.textAdmin, // Applied dynamic admin red
                 margin: 10,

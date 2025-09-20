@@ -4,14 +4,17 @@ import { Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import uuid from 'react-native-uuid';
 import { createReport } from '@/lib/api/reportService';
-import { MediaItem } from '@/lib/types';
-
+import { LocationCoords, MediaItem } from '@/lib/types';
+import * as Location from 'expo-location';
 export function useCreateReportForm() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [mediaList, setMediaList] = useState<MediaItem[]>([]);
     const [loading, setLoading] = useState(false);
 
+    // 2. Add state for location
+    const [location, setLocation] = useState<LocationCoords | null>(null);
+    const [isFetchingLocation, setIsFetchingLocation] = useState(false);
     const pickMedia = async () => {
         /*
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -95,9 +98,37 @@ export function useCreateReportForm() {
             setMediaList(prevList => [...prevList, ...newItems]);
         }
     };
+
+    const fetchLocation = async () => {
+        setIsFetchingLocation(true);
+        try {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                Alert.alert('Permission Denied', 'Please enable location services to use this feature.');
+                return;
+            }
+
+            let locationData = await Location.getCurrentPositionAsync({});
+            setLocation({
+                lat: locationData.coords.latitude,
+                lng: locationData.coords.longitude,
+            });
+        } catch (error) {
+            console.error("Error fetching location:", error);
+            Alert.alert("Error", "Could not fetch location.");
+        } finally {
+            setIsFetchingLocation(false);
+        }
+    };
+
     const savePost = async () => {
-        if (!title || !description) {
-            Alert.alert("Incomplete data", "Please fill all fields.");
+        if (!title || !description || !location) {
+            let errorMessage = "Please fill all required fields.";
+            if (!location) {
+                errorMessage = "Please fetch your location before submitting the report.";
+            }
+            Alert.alert("Incomplete Report", errorMessage);
+
             return false;
         }
         setLoading(true);
@@ -106,7 +137,8 @@ export function useCreateReportForm() {
                 title,
                 description,
                 // Replace with actual coordinates from a location picker
-                { lat: 21.0077, lng: 75.5626, address: "Nagpur" }, // Example: Jalgaon coordinates
+                //{ lat: 21.0077, lng: 75.5626, address: "Nagpur" }, // Example: Jalgaon coordinates
+                location,
                 // ✅ Use a valid category from your schema's enum list
                 "pothole",
                 mediaList // Pass the first media item
@@ -140,5 +172,8 @@ export function useCreateReportForm() {
         pickMedia,
         captureMedia,
         savePost,
+        location,
+        isFetchingLocation,
+        fetchLocation,
     };
 }

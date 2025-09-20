@@ -33,7 +33,7 @@ export default function PostDetails({ post }: { post: Post }) {
             <Text style={cstyles.title}>{post.title}</Text>
 
             <View style={[styles.separator, { marginVertical: 3 }]} />
-            <Text style={cstyles.creator}>By: Anonymous(not implemented)</Text>
+            <Text style={cstyles.creator}>By: {post.createdBy}</Text>
             <Text style={cstyles.date}>
               {new Date(post.createdAt).toLocaleDateString()}
             </Text>
@@ -48,11 +48,11 @@ export default function PostDetails({ post }: { post: Post }) {
                 renderItem={({ item }) => (
                   // This function renders one image for each item in the data array
                   <Image
-                    source={{ uri: item.url }}
+                    source={{ uri: item.url }} //server gives url not uri
                     style={cstyles.scrollableMediaImage} // Use a new style for list items
                   />
                 )}
-                keyExtractor={(item) => item.url} // Provides a unique key for each image
+                keyExtractor={(item) => item.url} // Provides a unique key for each image //server gives url not uri
                 horizontal={true} // This is the key prop to enable horizontal scrolling
                 showsHorizontalScrollIndicator={false} // Hides the scrollbar for a cleaner look
                 contentContainerStyle={cstyles.mediaListContainer} // Style for the list itself
@@ -60,7 +60,10 @@ export default function PostDetails({ post }: { post: Post }) {
             )}
             <CollapsibleView title="View Location on Maps">
               <View style={[styles.mapContainer, {}]}>
-                <MapViewComponent latitude={21.1836} longitude={79.0335} />
+                <MapViewComponent
+                  latitude={post.location.lat}
+                  longitude={post.location.lng}
+                />
               </View>
             </CollapsibleView>
             <View style={[styles.separator, { marginVertical: 5 }]} />

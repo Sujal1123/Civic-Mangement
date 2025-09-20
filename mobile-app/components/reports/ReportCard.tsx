@@ -19,7 +19,7 @@ export default function ReportCard({ post }: ReportCardProps) {
       <Text style={cstyles.title}>{post.title}</Text>
       <Text style={cstyles.description}>{post.description}</Text>
       {post.media.length > 0 && (
-        <Image source={{ uri: post.media[0].url }} style={cstyles.mediaImage} />
+        <Image source={{ uri: post.media[0].url }} style={cstyles.mediaImage} /> //server gives url not uri
       )}
       <Text style={cstyles.date}>
         Posted on: {new Date(post.createdAt).toLocaleString()}

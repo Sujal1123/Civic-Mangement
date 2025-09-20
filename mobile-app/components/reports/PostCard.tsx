@@ -40,7 +40,7 @@ export default function PostCard({ post, onEditPress }: PostCardProps) {
           <Text style={cstyles.description}>{post.description}</Text>
           {post.media.length > 0 && (
             <Image
-              source={{ uri: post.media[0].url }}
+              source={{ uri: post.media[0].url }} //server gives url not uri
               style={cstyles.mediaImage}
             />
           )}

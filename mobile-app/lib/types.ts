@@ -88,3 +88,5 @@ export interface Location {
     imageUrl: string;
     mapUrl: string;
 }
+
+export type LocationCoords = { lat: number; lng: number; address?: string };

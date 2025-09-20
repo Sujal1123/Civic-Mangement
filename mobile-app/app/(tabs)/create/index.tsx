@@ -26,6 +26,9 @@ export default function CreateScreen() {
     loading,
     pickMedia,
     captureMedia,
+    location,
+    isFetchingLocation,
+    fetchLocation,
     savePost,
   } = useCreateReportForm();
 
@@ -51,6 +54,9 @@ export default function CreateScreen() {
           mediaList={mediaList}
           onPickMedia={pickMedia}
           onCaptureMedia={captureMedia}
+          location={location}
+          isFetchingLocation={isFetchingLocation}
+          onFetchLocation={fetchLocation}
         />
 
         {/* 3. The MediaPicker and separators are REMOVED from here */}

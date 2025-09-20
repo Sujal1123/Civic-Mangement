@@ -4,7 +4,7 @@ import { Report, MediaItem } from '@/lib/types';
 export async function createReport(
     title: string,
     description: string,
-    location: { lat: number, lng: number, address: string } = { lat: 21.1458, lng: 79.0882, address: 'Nagpur, MH' },
+    location: { lat: number, lng: number, address?: string } = { lat: 21.1458, lng: 79.0882, address: 'LocationName' },
     category: "pothole" | "streetlight" | "garbage" | "water" | "other" = "other",
     mediaList?: MediaItem[],
     status?: "submitted" | "in-progress" | "resolved",
