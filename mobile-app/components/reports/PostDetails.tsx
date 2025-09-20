@@ -13,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import MapView from "react-native-maps";
 import MapViewComponent from "@/components/maps/MapView";
 import { useStylePalette } from "@/constants/StylePalette";
+import CollapsibleView from "../common/CollapsableView";
 
 export default function PostDetails({ post }: { post: Post }) {
   // 1. Get the effective theme ('light' or 'dark')
@@ -36,9 +37,11 @@ export default function PostDetails({ post }: { post: Post }) {
             <Text style={cstyles.date}>
               {new Date(post.createdAt).toLocaleDateString()}
             </Text>
+            {/*
             <View style={[styles.mapContainer, {}]}>
-              <MapViewComponent latitude={21.1836} longitude={79.0335} />
-            </View>
+              
+            </View>*/}
+
             {post.media && post.media.length > 0 && (
               <FlatList
                 data={post.media} // The array of images to display
@@ -55,7 +58,11 @@ export default function PostDetails({ post }: { post: Post }) {
                 contentContainerStyle={cstyles.mediaListContainer} // Style for the list itself
               />
             )}
-
+            <CollapsibleView title="View Location on Maps">
+              <View style={[styles.mapContainer, {}]}>
+                <MapViewComponent latitude={21.1836} longitude={79.0335} />
+              </View>
+            </CollapsibleView>
             <View style={[styles.separator, { marginVertical: 5 }]} />
             <Text style={cstyles.description}>{post.description}</Text>
           </View>

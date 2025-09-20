@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: "flex-end",
     alignItems: "center",
-    borderRadius: 12, // Apply border radius to the container
+    borderRadius: 0, // Apply border radius to the container
     overflow: "hidden", // Ensure the map respects the container's border radius
   },
   map: {

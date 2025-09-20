@@ -75,7 +75,7 @@ export default function MediaPicker({
           {mediaList.map((media, index) => (
             <TouchableOpacity key={index} style={cstyles.thumbnailWrapper}>
               {media.type === "image" ? (
-                <Image source={{ uri: media.url }} style={cstyles.thumbnail} />
+                <Image source={{ uri: media.uri }} style={cstyles.thumbnail} />
               ) : (
                 <View style={cstyles.videoThumbnail}>
                   <Text style={cstyles.videoText}>🎬</Text>

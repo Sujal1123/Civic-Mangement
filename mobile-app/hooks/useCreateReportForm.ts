@@ -13,28 +13,58 @@ export function useCreateReportForm() {
     const [loading, setLoading] = useState(false);
 
     const pickMedia = async () => {
+        /*
         let result = await ImagePicker.launchImageLibraryAsync({
             // To fix your warning, use 'MediaTypeOptions'
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            mediaTypes: 
             allowsEditing: true,
             allowsMultipleSelection: true, // Make sure this is true
             quality: 1,
+        });*/
+        const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (!permission.granted) {
+            Alert.alert("Permission required", "Allow access to media library.");
+            return;
+        }
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ["images", "videos"],
+
+            allowsMultipleSelection: true, // Make sure this is true
+            //allowsEditing: true,
+            quality: 1,
         });
-
         if (!result.canceled && result.assets) {
+            const supportedAssets = result.assets.filter(asset =>
+                asset.type === 'image' || asset.type === 'video'
+            );
             // 1. 'result.assets' is an array. We must map over it.
-            const newItems = result.assets.map(asset => ({
-                url: asset.uri,
-                //name: asset.fileName || `media-${Date.now()}`,
-                type: asset.type || 'image', // 'image' or 'video'
+            const newItems = supportedAssets.map(asset => ({
+                uri: asset.uri,
+                name: asset.fileName || `media-${Date.now()}`,
+                // We can now be 100% confident that the type is 'image' or 'video'
+                type: asset.type as 'image' | 'video',
             }));
-
+            /*
+            if (!result.canceled && result.assets) {
+                        // 1. 'result.assets' is an array. We must map over it.
+                        const newItems = result.assets.map(asset => ({
+                            uri: asset.uri,
+                            name: asset.fileName || `media-${Date.now()}`,
+                            type: asset.type || 'image', // 'image' or 'video'
+                        }));
+            
+                        // 2. Update the state with the new items
+                        setMediaList(prevList => [...prevList, ...newItems]);
+                    }                         
+            
+            */
             // 2. Update the state with the new items
+            console.log("media", newItems);
             setMediaList(prevList => [...prevList, ...newItems]);
         }
     };
     const captureMedia = async () => {
-        // Request camera permissions first
+        // Request camera permissi"ons first
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== 'granted') {
             alert('Sorry, we need camera permissions to make this work!');
@@ -42,20 +72,26 @@ export function useCreateReportForm() {
         }
 
         let result = await ImagePicker.launchCameraAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            mediaTypes: ['images', 'videos'],
+
+            //allowsMultipleSelection: true, // Make sure this is true
             allowsEditing: true,
             quality: 1,
         });
 
         if (!result.canceled && result.assets) {
-            // 1. 'result.assets' is an array (usually with 1 item for camera)
-            const newItems = result.assets.map(asset => ({
-                url: asset.uri,
-                //name: asset.fileName || `camera-${Date.now()}`,
-                type: asset.type || 'image',
+            const supportedAssets = result.assets.filter(asset =>
+                asset.type === 'image' || asset.type === 'video'
+            );
+            // 1. 'result.assets' is an array. We must map over it.
+            const newItems = supportedAssets.map(asset => ({
+                uri: asset.uri,
+                name: asset.fileName || `media-${Date.now()}`,
+                // We can now be 100% confident that the type is 'image' or 'video'
+                type: asset.type as 'image' | 'video',
             }));
 
-            // 2. Update the state
+            // 2. Update the state with the new items
             setMediaList(prevList => [...prevList, ...newItems]);
         }
     };

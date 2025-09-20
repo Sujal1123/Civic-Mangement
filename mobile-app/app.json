@@ -24,7 +24,12 @@
       "androidStatusBar": {
         "translucent": true
       },
-      "package": "com.anonymous.CivicSync"
+      "package": "com.anonymous.CivicSync",
+      "config": {
+    "googleMaps": {
+      "apiKey": "AIzaSyD_mywvp69ivsOaWr97g3AG1O1WyW4NW9c"
+    }
+  }
     },
     "web": {
       "bundler": "metro",

@@ -19,21 +19,27 @@ export type Report = {
         lng: number;
         address?: string;
     };
-    //category: "pothole" | "streetlight" | "garbage" | "water" | "other" | string;
     category: "pothole" | "streetlight" | "garbage" | "water" | "other";
-    media: MediaItem[];  //photo urls
+
+    // ✅ FIX: This now perfectly matches your server's JSON response
+    media: {
+        name: string;
+        url: string;
+        type: string; // Use 'string' here, as it's raw from the API
+    }[];
+
     status?: "submitted" | "in-progress" | "resolved";
     assignedTo?: any;
     createdBy: any;
     createdAt: string;
-    updatedAt: string;   // From timestamps
+    updatedAt: string;
 };
 
 // The media item structure used in the app
 export type MediaItem = {
-    url: string;
+    uri: string;
     type: "image" | "video" | "audio";
-    //name: string;
+    name: string;
 };
 // ✅ Represents a formatted report, ready to be displayed in your UI components
 export type Post = {

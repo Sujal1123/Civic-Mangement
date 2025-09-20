@@ -28,12 +28,11 @@ export async function createReport(
 
         // Append media file if it exists
         if (mediaList && mediaList.length > 0) {
-            mediaList.forEach((media, index) => {
-                // The backend expects an array under the *same key*, "media"
-                formData.append("media", {
-                    url: media.url,
-                    //name: media.name,
-                    type: media.type === "image" ? "image/jpeg" : "video/mp4",
+            mediaList.forEach(mediaItem => {
+                formData.append('media', {
+                    uri: mediaItem.uri, // `uri` is the local file path
+                    name: mediaItem.name, // The filename
+                    type: mediaItem.type === 'image' ? 'image/jpeg' : 'video/mp4', // The MIME type
                 } as any);
             });
         }
