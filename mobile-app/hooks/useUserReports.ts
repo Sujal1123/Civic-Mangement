@@ -37,8 +37,14 @@ export function useUserReports() {
                 category: (report.category || 'other') as Post['category'],
                 status: (report.status || 'submitted') as Post['status'],
 
-                // --- User ID Mappings ---
-                createdBy: report.createdBy,
+                // --- User Details Mappings ---
+                createdBy: {
+                    id: report.createdBy._id,
+                    name: report.createdBy.name,
+                    email: report.createdBy.email,
+                    role: report.createdBy.role,
+                },
+                createdByName: report.createdByName,
                 assignedTo: report.assignedTo,
                 // --- Transformed Media Array ---
                 // The old 'photoUrl' is replaced with the new 'media' array.
@@ -72,7 +78,8 @@ export function useUserReports() {
     })(),
                 */
             }));
-
+            console.log("before formating", reports[0]);
+            console.log("after formating", formattedPosts[0]);
             setPosts(formattedPosts);
         } catch (error) {
             console.error("Error loading posts:", error);

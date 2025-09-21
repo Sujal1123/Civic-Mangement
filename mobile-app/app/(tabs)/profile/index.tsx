@@ -65,7 +65,7 @@ export default function ProfileScreen() {
                   { marginBottom: 3, textAlignVertical: "top" },
                 ]}
               >
-                Jayant{/*user.name*/}
+                {user.name}
               </Text>
               <Text
                 style={[
@@ -113,6 +113,7 @@ export default function ProfileScreen() {
               <PostCard
                 key={post.id}
                 post={post}
+                userName={user?.name}
                 onEditPress={() => handleEditPress(post)}
               />
             ))

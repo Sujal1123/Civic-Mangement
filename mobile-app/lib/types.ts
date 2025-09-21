@@ -27,14 +27,24 @@ export type Report = {
         url: string;
         type: string; // Use 'string' here, as it's raw from the API
     }[];
-
+    createdBy: {
+        _id: string;
+        email: string;
+        name: string;
+        role: string;
+    };
     status?: "submitted" | "in-progress" | "resolved";
     assignedTo?: any;
-    createdBy: any;
+    //createdBy: any;
     createdAt: string;
     updatedAt: string;
+    createdByName: string;
 };
+/*server data fetched
 
+[{"__v": 0, "_id": "68d010b02c9ac593f7b5cb6a", "category": "pothole", "createdAt": "2025-09-21T14:50:24.596Z", "createdBy": {"_id": "68bee7bcba030dc0d532298c", "email": "j", "name": "Jayant Citizen", "role": "citizen"}, "createdByName": "Jayant Citizen", "description": "22", "location": {"lat": 21.1756777, "lng": 79.040598}, "media": [[Object]], "status": "submitted", "title": "check 2", "updatedAt": "2025-09-21T14:50:24.596Z"}, 
+
+*/
 // The media item structure used in the app
 export type MediaItem = {
     uri: string;
@@ -49,7 +59,7 @@ export type Post = {
     media: MediaItem[];  //photo urls and wrong:( Assumes API maps 'url' to 'uri')
     createdAt: string;   // From timestamps
     updatedAt: string;   // From timestamps
-
+    createdByName: string;
     // --- Fields added from reportSchema ---
     location: {
         lat: number;
@@ -61,7 +71,12 @@ export type Post = {
 
     status: "submitted" | "in-progress" | "resolved";
 
-    createdBy: string; // Holds the user's ID (mongoose.Schema.Types.ObjectId)
+    createdBy: {
+        id: string;
+        name: string;
+        email: string;
+        role: string;
+    }; // Holds the user's detail
 
     assignedTo?: string; // Holds the assigned user's ID
 };

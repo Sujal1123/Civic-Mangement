@@ -2,6 +2,7 @@ import React from "react";
 import { ScrollView, Text, StyleSheet, View } from "react-native";
 import { Post } from "@/lib/types";
 import ReportCard from "./ReportCard";
+import PostCard from "./PostCard";
 
 type ReportListProps = {
   posts: Post[];
@@ -11,11 +12,13 @@ export default function ReportList({ posts }: ReportListProps) {
   if (posts.length === 0) {
     return <Text style={styles.noPosts}>No reports available</Text>;
   }
-
+  {
+    /*<ReportCard key={post.id} post={post} /> <PostCard key={post.id} post={post} />*/
+  }
   return (
     <ScrollView contentContainerStyle={styles.containerpost}>
       {posts.map((post) => (
-        <ReportCard key={post.id} post={post} />
+        <PostCard key={post.id} post={post} />
       ))}
     </ScrollView>
   );

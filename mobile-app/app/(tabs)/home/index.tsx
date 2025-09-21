@@ -32,7 +32,7 @@ export default function FeedScreen() {
     <View style={styles.tabcontainer}>
       <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
         <ThemeCycleButton style={{ opacity: 0 }}></ThemeCycleButton>
-        <Text style={styles.title}>Welcome Back, Jayant{/*user?.name*/}</Text>
+        <Text style={styles.title}>Welcome Back, {user?.name}</Text>
         <ReportList posts={posts} />
       </SafeAreaView>
     </View>

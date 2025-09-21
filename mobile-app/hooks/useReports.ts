@@ -38,8 +38,14 @@ export function useReports() {
                 category: (report.category || 'other') as Post['category'],
                 status: (report.status || 'submitted') as Post['status'],
 
-                // --- User ID Mappings ---
-                createdBy: report.createdBy,
+                // --- User Details Mappings ---
+                createdBy: {
+                    _id: report.createdBy._id,
+                    name: report.createdBy.name,
+                    email: report.createdBy.email,
+                    role: report.createdBy.role,
+                },
+                createdByName: report.createdByName,
                 assignedTo: report.assignedTo,
                 // --- Transformed Media Array ---
                 // The old 'photoUrl' is replaced with the new 'media' array.
@@ -117,8 +123,15 @@ export function useReportById(id: string | undefined) {
                     category: (report.category || 'other') as Post['category'],
                     status: (report.status || 'submitted') as Post['status'],
 
-                    // --- User ID Mappings ---
-                    createdBy: report.createdBy,
+
+                    // --- User Details Mappings ---
+                    createdBy: {
+                        id: report.createdBy._id,
+                        email: report.createdBy.email,
+                        name: report.createdBy.name,
+                        role: report.createdBy.role,
+                    },
+                    createdByName: report.createdByName,
                     assignedTo: report.assignedTo,
                     // --- Transformed Media Array ---
                     // The old 'photoUrl' is replaced with the new 'media' array.
@@ -132,7 +145,6 @@ export function useReportById(id: string | undefined) {
 
                 setPosts(formattedPosts);
 
-                setPosts(formattedPosts);
 
             } catch (e) {
                 setError(e as Error);

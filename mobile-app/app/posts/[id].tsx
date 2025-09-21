@@ -12,7 +12,7 @@ import { useStylePalette } from "@/constants/StylePalette";
 
 export default function PostDetailScreen() {
   const { post: postString } = useLocalSearchParams<{ post: string }>();
-
+  const { userName: userName } = useLocalSearchParams<{ userName: string }>();
   // ✅ Get the theme at the top of the component
   const { effectiveTheme } = useTheme();
   // ✅ Pass the theme to the styles function
@@ -46,7 +46,7 @@ export default function PostDetailScreen() {
         }}
       />
 
-      <PostDetails post={post} />
+      <PostDetails post={post} userName={userName} />
 
       {/**<MapView
   latitude={selectedPost.latitude}

@@ -14,10 +14,15 @@ import { useStylePalette } from "@/constants/StylePalette";
 
 type PostCardProps = {
   post: Post;
-  onEditPress: () => void;
+  onEditPress?: () => void;
+  userName?: string;
 };
 
-export default function PostCard({ post, onEditPress }: PostCardProps) {
+export default function PostCard({
+  post,
+  onEditPress,
+  userName,
+}: PostCardProps) {
   // 1. Get the effective theme ('light' or 'dark')
   const { effectiveTheme, colors } = useTheme();
   // 2. Pass the theme to the styles function
@@ -30,7 +35,7 @@ export default function PostCard({ post, onEditPress }: PostCardProps) {
       href={{
         pathname: `../posts/${post.id}`,
         // ✅ Pass the entire post object as a stringified parameter
-        params: { post: JSON.stringify(post) },
+        params: { post: JSON.stringify(post), userName },
       }}
       asChild
     >
@@ -47,17 +52,22 @@ export default function PostCard({ post, onEditPress }: PostCardProps) {
           <Text style={cstyles.date}>
             Posted on: {new Date(post.createdAt).toLocaleString()}
           </Text>
+          {!onEditPress && (
+            <Text style={cstyles.date}>Posted By: {post.createdByName}</Text>
+          )}
 
           {/* For the button, we stop the press event from bubbling up to the Link */}
-          <TouchableOpacity
-            style={cstyles.editButton}
-            onPress={(e) => {
-              e.stopPropagation(); // This prevents the Link from navigating
-              onEditPress();
-            }}
-          >
-            <Text style={cstyles.editButtonText}>Edit</Text>
-          </TouchableOpacity>
+          {onEditPress && (
+            <TouchableOpacity
+              style={cstyles.editButton}
+              onPress={(e) => {
+                e.stopPropagation(); // This prevents the Link from navigating
+                onEditPress();
+              }}
+            >
+              <Text style={cstyles.editButtonText}>Edit</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </Pressable>
     </Link>
@@ -96,7 +106,7 @@ export const getStyles = (theme: "light" | "dark") => {
     },
     date: {
       fontSize: 12,
-      textAlign: "right",
+      textAlign: "left",
       color: colors.cardDate,
     },
     editButton: {

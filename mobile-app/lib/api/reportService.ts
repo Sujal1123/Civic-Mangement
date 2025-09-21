@@ -52,6 +52,7 @@ export async function createReport(
 export async function getReports(category?: string, status?: string): Promise<Report[]> {
     try {
         const res = await apiClient.get("/reports", { params: { category, status } });
+        console.log("report got", res.data.data[0]);
         return res.data.data;
     } catch (error: any) {
         console.error("Error fetching reports:", error.response?.data || error.message);
@@ -76,6 +77,7 @@ export async function getMyReports(): Promise<Report[]> {
     try {
         // ✅ Uses the central apiClient directly
         const res = await apiClient.get("/reports/my");
+        // console.log("report got my", res.data.data[0]);
         return res.data.data;
     } catch (error: any) {
         console.error("Error fetching my reports:", error.response?.data || error.message);

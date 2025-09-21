@@ -15,13 +15,19 @@ import MapViewComponent from "@/components/maps/MapView";
 import { useStylePalette } from "@/constants/StylePalette";
 import CollapsibleView from "../common/CollapsableView";
 
-export default function PostDetails({ post }: { post: Post }) {
+export default function PostDetails({
+  post,
+  userName,
+}: {
+  post: Post;
+  userName?: string;
+}) {
   // 1. Get the effective theme ('light' or 'dark')
   const { effectiveTheme } = useTheme();
   // 2. Pass the theme to the styles function
   const cstyles = getStyles(effectiveTheme);
   const styles = useStylePalette();
-
+  console.log("specific post", post);
   return (
     <View style={styles.container}>
       <SafeAreaView
@@ -33,7 +39,9 @@ export default function PostDetails({ post }: { post: Post }) {
             <Text style={cstyles.title}>{post.title}</Text>
 
             <View style={[styles.separator, { marginVertical: 3 }]} />
-            <Text style={cstyles.creator}>By: {post.createdBy}</Text>
+            <Text style={cstyles.creator}>
+              By: {userName ? userName : post.createdBy.name}
+            </Text>
             <Text style={cstyles.date}>
               {new Date(post.createdAt).toLocaleDateString()}
             </Text>
