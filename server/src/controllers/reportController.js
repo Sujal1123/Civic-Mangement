@@ -40,16 +40,28 @@ export const getReports = async (req, res) => {
     if (status) filter.status = status;
 
     const reports = await Report.find(filter)
-      .populate("createdBy", "name email role")
-      .populate("assignedTo", "name email role")
-      .select("+media") // ✅ ADDED THIS LINE to include the media array
+      .populate({
+        path: "createdBy",
+        select: "name email role",
+      })
+      .populate({
+        path: "assignedTo",
+        select: "name email role",
+      })
+      .select("+media")
       .sort({ createdAt: -1 });
 
-    return successResponse(res, reports, "Reports fetched successfully");
+    const formattedReports = reports.map((report) => ({
+      ...report.toObject(),
+      createdByName: report.createdBy?.name || "Unknown User", 
+    }));
+
+    return successResponse(res, formattedReports, "Reports fetched successfully");
   } catch (error) {
     return errorResponse(res, error.message);
   }
 };
+
 
 // Admin: Update report status (This function is correct)
 export const updateReportStatus = async (req, res) => {
@@ -98,7 +110,7 @@ export const updateMyReport = async (req, res) => {
 // Citizen: Get my reports
 export const getMyReports = async (req, res) => {
   try {
-    const reports = await Report.find({ createdBy: req.user._id })
+    const reports = await Report.find({ createdBy: req.user._id})
       .select("+media") // ✅ ADDED THIS LINE to include the media array
       .sort({
         createdAt: -1,
