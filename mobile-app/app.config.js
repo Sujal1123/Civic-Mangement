@@ -1,4 +1,7 @@
-{
+// 1. Import the dotenv config at the very top
+import 'dotenv/config';
+
+export default {
   "expo": {
     "name": "CivicSync",
     "slug": "CivicSync",
@@ -27,7 +30,7 @@
       "package": "com.anonymous.CivicSync",
       "config": {
     "googleMaps": {
-      "apiKey": "AIzaSyD_mywvp69ivsOaWr97g3AG1O1WyW4NW9c"
+      "apiKey": process.env.GOOGLE_MAPS_API_KEY
     }
   }
     },
