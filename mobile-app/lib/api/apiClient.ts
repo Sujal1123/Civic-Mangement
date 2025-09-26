@@ -1,11 +1,20 @@
 import axios from 'axios';
 import { loadUser } from '../storage/userStorage';
 
+// 1. Initialize with a placeholder URL.
+// This will cause an obvious error if the IP is not set, which is good for debugging.
 const apiClient = axios.create({
-    baseURL: 'http://localhost:5000/api', // Your server's base URL
+    baseURL: 'http://placeholder-url.com/api',
 });
 
-// Use an interceptor to add the auth token to every API request
+// 2. Create and export a function to update the baseURL at runtime.
+export const setApiBaseUrl = (ipAddress: string) => {
+    // Make sure to include the port and /api path
+    apiClient.defaults.baseURL = `http://${ipAddress}:5000/api`;
+    console.log(`API base URL set to: ${apiClient.defaults.baseURL}`);
+};
+
+// Your interceptor for adding the auth token remains unchanged.
 apiClient.interceptors.request.use(
     async (config) => {
         const user = await loadUser();
